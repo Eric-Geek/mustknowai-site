@@ -3,18 +3,19 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Input } from "@/components/ui/input"
 import { Badge } from "@/components/ui/badge"
 import Head from 'next/head';
-import Image from 'next/image';
+import Image from 'next/image'; // 确保导入 Next.js Image 组件
 import {
   Twitter,
   Github,
   Calendar,
   ArrowRight,
   Menu,
-  Brain as DefaultBrainIcon,
-  Code as DefaultCodeIcon,
-  ImageIcon as DefaultImageIcon,
-  PenTool as DefaultPenTool,
-  Video as DefaultVideoIcon,
+  Brain as DefaultBrainIcon, // 保留 Brain 作为网站 Logo
+  // 如果不再使用 Lucide 作为分类图标的后备，可以移除下面这些
+  // PenTool as DefaultPenTool,
+  // ImageIcon as DefaultImageIcon,
+  // Video as DefaultVideoIcon,
+  // Code as DefaultCodeIcon,
 } from "lucide-react"
 import { GetStaticProps, InferGetStaticPropsType } from 'next';
 import { useRouter } from 'next/router';
@@ -54,7 +55,7 @@ export default function LandingPage({ t, title, description }: InferGetStaticPro
   const router = useRouter();
   const { locale } = router;
 
-  const featuredTools = [
+  const featuredTools = [ // 这部分的图标应该已经按照您的 PNG 图片更新了
     {
       icon: (
         <Image
@@ -67,7 +68,7 @@ export default function LandingPage({ t, title, description }: InferGetStaticPro
       ),
       name: "ChatGPT Plus",
       pitch: "高级AI对话，处理复杂任务",
-      // color: "from-green-500 to-emerald-600", // 渐变背景色相关的 color 属性可以保留，以备将来使用，或者完全移除
+      color: "from-green-500 to-emerald-600",
       url: "https://chat.openai.com"
     },
     {
@@ -82,6 +83,7 @@ export default function LandingPage({ t, title, description }: InferGetStaticPro
       ),
       name: "Midjourney",
       pitch: "创作令人惊叹的AI生成艺术品",
+      color: "from-purple-500 to-pink-600",
       url: "https://midjourney.com"
     },
     {
@@ -96,6 +98,7 @@ export default function LandingPage({ t, title, description }: InferGetStaticPro
       ),
       name: "GitHub Copilot",
       pitch: "AI驱动的代码补全和辅助",
+      color: "from-blue-500 to-cyan-600",
       url: "https://github.com/features/copilot"
     },
     {
@@ -110,6 +113,7 @@ export default function LandingPage({ t, title, description }: InferGetStaticPro
       ),
       name: "Notion AI",
       pitch: "提高生产力的智能写作助手",
+      color: "from-orange-500 to-red-600",
       url: "https://notion.so/product/ai"
     },
     {
@@ -124,6 +128,7 @@ export default function LandingPage({ t, title, description }: InferGetStaticPro
       ),
       name: "RunwayML",
       pitch: "AI视频编辑和生成工具",
+      color: "from-indigo-500 to-purple-600",
       url: "https://runwayml.com"
     },
     {
@@ -138,30 +143,32 @@ export default function LandingPage({ t, title, description }: InferGetStaticPro
       ),
       name: "Claude AI",
       pitch: "乐于助人的AI助手，用于分析和写作",
+      color: "from-teal-500 to-green-600",
       url: "https://claude.ai"
     },
   ];
 
+  // 更新 categories 数组以使用您准备好的 PNG 图片
   const categories = [
     {
       icon: (
         <Image
-          src="/icons/categories/writing-icon.png"
+          src="/icons/categories/writing-icon.png" // 假设您的写作分类图标文件名
           alt={t.categoryWriting || "Writing Category"}
-          width={48}
+          width={48} // 对应 h-12 w-12
           height={48}
           className="object-contain"
         />
       ),
       titleKey: "categoryWriting",
       descriptionKey: "categoryWritingDesc",
-      color: "from-blue-500/20 to-cyan-500/20",
+      color: "from-blue-500/20 to-cyan-500/20", // 这个颜色是背景渐变，可以保留
       query: "Writing"
     },
     {
       icon: (
         <Image
-          src="/icons/categories/image-icon.png"
+          src="/icons/categories/image-icon.png" // 假设您的图像分类图标文件名
           alt={t.categoryImage || "Image Category"}
           width={48}
           height={48}
@@ -176,7 +183,7 @@ export default function LandingPage({ t, title, description }: InferGetStaticPro
     {
       icon: (
         <Image
-          src="/icons/categories/video-icon.png"
+          src="/icons/categories/video-icon.png" // 假设您的视频分类图标文件名
           alt={t.categoryVideo || "Video Category"}
           width={48}
           height={48}
@@ -191,7 +198,7 @@ export default function LandingPage({ t, title, description }: InferGetStaticPro
     {
       icon: (
         <Image
-          src="/icons/categories/code-icon.png"
+          src="/icons/categories/code-icon.png" // 假设您的代码分类图标文件名
           alt={t.categoryCode || "Code Category"}
           width={48}
           height={48}
@@ -205,7 +212,7 @@ export default function LandingPage({ t, title, description }: InferGetStaticPro
     },
   ];
 
-  const articles = [
+  const articles = [ // 文章数据保持不变
     {
       slug: "getting-started-with-ai-art-generation",
       image: "/placeholder.svg?height=200&width=300",
@@ -251,9 +258,10 @@ export default function LandingPage({ t, title, description }: InferGetStaticPro
       <header className="sticky top-0 z-50 w-full border-b border-white/20 bg-white/80 backdrop-blur-md dark:bg-slate-950/80">
         <div className="container mx-auto flex h-16 items-center justify-between px-4">
           <Link href="/" locale={locale} className="flex items-center space-x-2">
-            <DefaultBrainIcon className="h-8 w-8 text-blue-600 dark:text-blue-400" />
+            <DefaultBrainIcon className="h-8 w-8 text-blue-600 dark:text-blue-400" /> {/* 网站 Logo 暂时保留 Lucide Brain */}
             <span className="text-xl font-bold text-slate-900 dark:text-white">{t.siteName}</span>
           </Link>
+
           <nav className="hidden md:flex items-center space-x-6">
             <Link href="/" locale={locale} className="text-slate-700 hover:text-blue-600 dark:text-slate-300 dark:hover:text-blue-400 transition-colors">
                 {t.navHome}
@@ -266,6 +274,7 @@ export default function LandingPage({ t, title, description }: InferGetStaticPro
             </Link>
             <LanguageSwitcher />
           </nav>
+
           <div className="md:hidden flex items-center">
             <LanguageSwitcher />
             <Button variant="ghost" size="icon" aria-label="Toggle menu">
@@ -275,6 +284,7 @@ export default function LandingPage({ t, title, description }: InferGetStaticPro
         </div>
       </header>
 
+      {/* Hero Section */}
       <section className="relative py-20 lg:py-32">
         <div className="container mx-auto px-4 text-center">
           <div className="mx-auto max-w-4xl">
@@ -304,7 +314,7 @@ export default function LandingPage({ t, title, description }: InferGetStaticPro
         </div>
       </section>
 
-      {/* Featured Tools Section */}
+      {/* Featured Tools Section (已更新为使用您提供的 PNG) */}
       <section className="py-20 bg-white/50 backdrop-blur-sm dark:bg-slate-900/50">
         <div className="container mx-auto px-4">
           <div className="text-center mb-16">
@@ -320,8 +330,7 @@ export default function LandingPage({ t, title, description }: InferGetStaticPro
                 className="group hover:shadow-xl transition-all duration-300 bg-white/80 backdrop-blur-sm dark:bg-slate-800/80 border-white/20"
               >
                 <CardHeader>
-                  {/* 修改这里：移除背景色相关的类，调整 padding 和大小以适应图标 */}
-                  <div className={`inline-flex items-center justify-center p-1 rounded-lg text-white mb-4 w-auto h-auto`}> {/* 调整 padding 和大小，移除背景 */}
+                  <div className={`inline-flex items-center justify-center p-3 rounded-lg bg-gradient-to-r ${tool.color} text-white mb-4 w-14 h-14`}> {/* 确保容器有固定大小以容纳图片 */}
                     {tool.icon}
                   </div>
                   <CardTitle className="text-slate-900 dark:text-white">{tool.name}</CardTitle>
@@ -343,7 +352,7 @@ export default function LandingPage({ t, title, description }: InferGetStaticPro
         </div>
       </section>
 
-      {/* Categories Section */}
+      {/* Categories Section (已更新为使用您提供的 PNG) */}
       <section className="py-20">
         <div className="container mx-auto px-4">
           <div className="text-center mb-16">
@@ -358,8 +367,9 @@ export default function LandingPage({ t, title, description }: InferGetStaticPro
                 onClick={() => router.push(`/tools?category=${category.query}`, undefined, { locale })}
               >
                 <CardContent className="p-6 text-center">
-                  <div className={`inline-flex items-center justify-center p-4 rounded-lg bg-gradient-to-r ${category.color} mb-4 w-20 h-20`}>
-                    {category.icon}
+                  {/* 这个 div 用于包裹分类图标，并应用背景渐变和内边距 */}
+                  <div className={`inline-flex items-center justify-center p-4 rounded-lg bg-gradient-to-r ${category.color} mb-4 w-20 h-20`}> {/* 确保容器有固定大小以容纳图片 */}
+                    {category.icon} {/* 这里会渲染您指定的 Image 组件 */}
                   </div>
                   <h3 className="text-xl font-semibold text-slate-900 dark:text-white mb-2">{t[category.titleKey] || category.titleKey}</h3>
                   <p className="text-slate-600 dark:text-slate-300">{t[category.descriptionKey] || category.descriptionKey}</p>
@@ -370,7 +380,7 @@ export default function LandingPage({ t, title, description }: InferGetStaticPro
         </div>
       </section>
 
-      {/* Latest Articles Section */}
+      {/* Latest Articles Section (保持不变) */}
       <section className="py-20 bg-white/50 backdrop-blur-sm dark:bg-slate-900/50">
         <div className="container mx-auto px-4">
           <div className="text-center mb-16">
@@ -421,7 +431,7 @@ export default function LandingPage({ t, title, description }: InferGetStaticPro
         </div>
       </section>
 
-      {/* Newsletter Section */}
+      {/* Newsletter Section (保持不变) */}
       <section className="py-20">
         <div className="container mx-auto px-4">
           <Card className="bg-gradient-to-r from-blue-600 to-purple-600 border-none text-white">
@@ -444,7 +454,7 @@ export default function LandingPage({ t, title, description }: InferGetStaticPro
         </div>
       </section>
 
-      {/* Footer */}
+      {/* Footer (保持不变) */}
       <footer className="py-12 bg-slate-900 dark:bg-slate-950">
         <div className="container mx-auto px-4">
           <div className="flex flex-col md:flex-row items-center justify-between">
