@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  <url>
+    <loc>https://mustknowai.com/zh</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://mustknowai.com/en"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://mustknowai.com/zh"/>
+    <lastmod>2025-05-24</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>https://mustknowai.com/en</loc>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://mustknowai.com/zh"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://mustknowai.com/en"/>
+    <lastmod>2025-05-24</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>https://mustknowai.com/zh/tools</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://mustknowai.com/en/tools"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://mustknowai.com/zh/tools"/>
+    <lastmod>2025-05-24</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://mustknowai.com/en/tools</loc>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://mustknowai.com/zh/tools"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://mustknowai.com/en/tools"/>
+    <lastmod>2025-05-24</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://mustknowai.com/zh/blog</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://mustknowai.com/en/blog"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://mustknowai.com/zh/blog"/>
+    <lastmod>2025-05-24</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://mustknowai.com/en/blog</loc>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://mustknowai.com/zh/blog"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://mustknowai.com/en/blog"/>
+    <lastmod>2025-05-24</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  </urlset>

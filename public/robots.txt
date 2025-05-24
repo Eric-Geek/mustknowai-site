@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+Disallow: /api/ # 如果您有不想被索引的API路由
+
+Sitemap: https://mustknowai.com/sitemap.xml
