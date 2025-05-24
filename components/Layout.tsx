@@ -1,5 +1,4 @@
 // components/Layout.tsx
-import '@/app/globals.css';
 import { Inter as FontSans } from 'next/font/google';
 import { useRouter } from 'next/router';
 import Head from 'next/head';
