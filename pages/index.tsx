@@ -21,6 +21,7 @@ import { GetStaticProps, InferGetStaticPropsType } from 'next';
 import { useRouter } from 'next/router';
 import LanguageSwitcher from '@/components/LanguageSwitcher';
 import Link from 'next/link';
+import { useMemo, useCallback } from 'react';
 
 // 辅助函数加载翻译 (保持不变)
 async function loadTranslations(locale: string | undefined, defaultLocale: string = 'zh') {
@@ -55,15 +56,19 @@ export default function LandingPage({ t, title, description }: InferGetStaticPro
   const router = useRouter();
   const { locale } = router;
 
-  const featuredTools = [ // 这部分的图标应该已经按照您的 PNG 图片更新了
+  // 使用 useMemo 优化静态数据，避免每次渲染重新创建
+  const featuredTools = useMemo(() => [
     {
       icon: (
         <Image
-          src="/icons/tools/chatgpt-icon.png"
+          src="/icons/tools/chatgpt-icon.jpg"
           alt="ChatGPT Plus Logo"
           width={32}
           height={32}
           className="object-contain"
+          loading="lazy"
+          placeholder="blur"
+          blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAAIAAoDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAhEAACAQMDBQAAAAAAAAAAAAABAgMABAUGIWGRkqGx0f/EABUBAQEAAAAAAAAAAAAAAAAAAAMF/8QAGhEAAgIDAAAAAAAAAAAAAAAAAAECEgMRkf/aAAwDAQACEQMRAD8AltJagyeH0AthI5xdrLcNM91BF5pX2HaH9bcfaSXWGaRmknyJckliyjqTzSlT54b6bk+h0R//2Q=="
         />
       ),
       name: "ChatGPT Plus",
@@ -79,6 +84,9 @@ export default function LandingPage({ t, title, description }: InferGetStaticPro
           width={32}
           height={32}
           className="object-contain"
+          loading="lazy"
+          placeholder="blur"
+          blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAAIAAoDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAhEAACAQMDBQAAAAAAAAAAAAABAgMABAUGIWGRkqGx0f/EABUBAQEAAAAAAAAAAAAAAAAAAAMF/8QAGhEAAgIDAAAAAAAAAAAAAAAAAAECEgMRkf/aAAwDAQACEQMRAD8AltJagyeH0AthI5xdrLcNM91BF5pX2HaH9bcfaSXWGaRmknyJckliyjqTzSlT54b6bk+h0R//2Q=="
         />
       ),
       name: "Midjourney",
@@ -94,6 +102,9 @@ export default function LandingPage({ t, title, description }: InferGetStaticPro
           width={32}
           height={32}
           className="object-contain"
+          loading="lazy"
+          placeholder="blur"
+          blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAAIAAoDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAhEAACAQMDBQAAAAAAAAAAAAABAgMABAUGIWGRkqGx0f/EABUBAQEAAAAAAAAAAAAAAAAAAAMF/8QAGhEAAgIDAAAAAAAAAAAAAAAAAAECEgMRkf/aAAwDAQACEQMRAD8AltJagyeH0AthI5xdrLcNM91BF5pX2HaH9bcfaSXWGaRmknyJckliyjqTzSlT54b6bk+h0R//2Q=="
         />
       ),
       name: "GitHub Copilot",
@@ -109,6 +120,9 @@ export default function LandingPage({ t, title, description }: InferGetStaticPro
           width={32}
           height={32}
           className="object-contain"
+          loading="lazy"
+          placeholder="blur"
+          blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAAIAAoDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAhEAACAQMDBQAAAAAAAAAAAAABAgMABAUGIWGRkqGx0f/EABUBAQEAAAAAAAAAAAAAAAAAAAMF/8QAGhEAAgIDAAAAAAAAAAAAAAAAAAECEgMRkf/aAAwDAQACEQMRAD8AltJagyeH0AthI5xdrLcNM91BF5pX2HaH9bcfaSXWGaRmknyJckliyjqTzSlT54b6bk+h0R//2Q=="
         />
       ),
       name: "Notion AI",
@@ -124,6 +138,9 @@ export default function LandingPage({ t, title, description }: InferGetStaticPro
           width={32}
           height={32}
           className="object-contain"
+          loading="lazy"
+          placeholder="blur"
+          blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAAIAAoDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAhEAACAQMDBQAAAAAAAAAAAAABAgMABAUGIWGRkqGx0f/EABUBAQEAAAAAAAAAAAAAAAAAAAMF/8QAGhEAAgIDAAAAAAAAAAAAAAAAAAECEgMRkf/aAAwDAQACEQMRAD8AltJagyeH0AthI5xdrLcNM91BF5pX2HaH9bcfaSXWGaRmknyJckliyjqTzSlT54b6bk+h0R//2Q=="
         />
       ),
       name: "RunwayML",
@@ -139,6 +156,9 @@ export default function LandingPage({ t, title, description }: InferGetStaticPro
           width={32}
           height={32}
           className="object-contain"
+          loading="lazy"
+          placeholder="blur"
+          blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAAIAAoDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAhEAACAQMDBQAAAAAAAAAAAAABAgMABAUGIWGRkqGx0f/EABUBAQEAAAAAAAAAAAAAAAAAAAMF/8QAGhEAAgIDAAAAAAAAAAAAAAAAAAECEgMRkf/aAAwDAQACEQMRAD8AltJagyeH0AthI5xdrLcNM91BF5pX2HaH9bcfaSXWGaRmknyJckliyjqTzSlT54b6bk+h0R//2Q=="
         />
       ),
       name: "Claude AI",
@@ -146,33 +166,39 @@ export default function LandingPage({ t, title, description }: InferGetStaticPro
       color: "from-teal-500 to-green-600",
       url: "https://claude.ai"
     },
-  ];
+  ], []);
 
-  // 更新 categories 数组以使用您准备好的 PNG 图片
-  const categories = [
+  // 优化分类数据
+  const categories = useMemo(() => [
     {
       icon: (
         <Image
-          src="/icons/categories/writing-icon.png" // 假设您的写作分类图标文件名
+          src="/icons/categories/writing-icon.png"
           alt={t.categoryWriting || "Writing Category"}
-          width={48} // 对应 h-12 w-12
+          width={48}
           height={48}
           className="object-contain"
+          loading="lazy"
+          placeholder="blur"
+          blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAAIAAoDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAhEAACAQMDBQAAAAAAAAAAAAABAgMABAUGIWGRkqGx0f/EABUBAQEAAAAAAAAAAAAAAAAAAAMF/8QAGhEAAgIDAAAAAAAAAAAAAAAAAAECEgMRkf/aAAwDAQACEQMRAD8AltJagyeH0AthI5xdrLcNM91BF5pX2HaH9bcfaSXWGaRmknyJckliyjqTzSlT54b6bk+h0R//2Q=="
         />
       ),
       titleKey: "categoryWriting",
       descriptionKey: "categoryWritingDesc",
-      color: "from-blue-500/20 to-cyan-500/20", // 这个颜色是背景渐变，可以保留
+      color: "from-blue-500/20 to-cyan-500/20",
       query: "Writing"
     },
     {
       icon: (
         <Image
-          src="/icons/categories/image-icon.png" // 假设您的图像分类图标文件名
+          src="/icons/categories/image-icon.png"
           alt={t.categoryImage || "Image Category"}
           width={48}
           height={48}
           className="object-contain"
+          loading="lazy"
+          placeholder="blur"
+          blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAAIAAoDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAhEAACAQMDBQAAAAAAAAAAAAABAgMABAUGIWGRkqGx0f/EABUBAQEAAAAAAAAAAAAAAAAAAAMF/8QAGhEAAgIDAAAAAAAAAAAAAAAAAAECEgMRkf/aAAwDAQACEQMRAD8AltJagyeH0AthI5xdrLcNM91BF5pX2HaH9bcfaSXWGaRmknyJckliyjqTzSlT54b6bk+h0R//2Q=="
         />
       ),
       titleKey: "categoryImage",
@@ -183,11 +209,14 @@ export default function LandingPage({ t, title, description }: InferGetStaticPro
     {
       icon: (
         <Image
-          src="/icons/categories/video-icon.png" // 假设您的视频分类图标文件名
+          src="/icons/categories/video-icon.png"
           alt={t.categoryVideo || "Video Category"}
           width={48}
           height={48}
           className="object-contain"
+          loading="lazy"
+          placeholder="blur"
+          blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAAIAAoDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAhEAACAQMDBQAAAAAAAAAAAAABAgMABAUGIWGRkqGx0f/EABUBAQEAAAAAAAAAAAAAAAAAAAMF/8QAGhEAAgIDAAAAAAAAAAAAAAAAAAECEgMRkf/aAAwDAQACEQMRAD8AltJagyeH0AthI5xdrLcNM91BF5pX2HaH9bcfaSXWGaRmknyJckliyjqTzSlT54b6bk+h0R//2Q=="
         />
       ),
       titleKey: "categoryVideo",
@@ -198,11 +227,14 @@ export default function LandingPage({ t, title, description }: InferGetStaticPro
     {
       icon: (
         <Image
-          src="/icons/categories/code-icon.png" // 假设您的代码分类图标文件名
+          src="/icons/categories/code-icon.png"
           alt={t.categoryCode || "Code Category"}
           width={48}
           height={48}
           className="object-contain"
+          loading="lazy"
+          placeholder="blur"
+          blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAAIAAoDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAhEAACAQMDBQAAAAAAAAAAAAABAgMABAUGIWGRkqGx0f/EABUBAQEAAAAAAAAAAAAAAAAAAAMF/8QAGhEAAgIDAAAAAAAAAAAAAAAAAAECEgMRkf/aAAwDAQACEQMRAD8AltJagyeH0AthI5xdrLcNM91BF5pX2HaH9bcfaSXWGaRmknyJckliyjqTzSlT54b6bk+h0R//2Q=="
         />
       ),
       titleKey: "categoryCode",
@@ -210,9 +242,10 @@ export default function LandingPage({ t, title, description }: InferGetStaticPro
       color: "from-green-500/20 to-emerald-500/20",
       query: "Code"
     },
-  ];
+  ], [t]);
 
-  const articles = [ // 文章数据保持不变
+  // 优化文章数据
+  const articles = useMemo(() => [
     {
       slug: "getting-started-with-ai-art-generation",
       image: "/placeholder.svg?height=200&width=300",
@@ -237,7 +270,16 @@ export default function LandingPage({ t, title, description }: InferGetStaticPro
       excerptKey: "articleExcerptAIDev",
       categoryKey: "articleCategoryAnalysis",
     },
-  ];
+  ], []);
+
+  // 使用 useCallback 优化事件处理函数
+  const handleToolsNavigation = useCallback(() => {
+    router.push('/tools', undefined, { locale });
+  }, [router, locale]);
+
+  const handleCategoryClick = useCallback((query: string) => {
+    router.push(`/tools?category=${query}`, undefined, { locale });
+  }, [router, locale]);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 dark:from-slate-950 dark:via-blue-950 dark:to-indigo-950">
@@ -301,7 +343,7 @@ export default function LandingPage({ t, title, description }: InferGetStaticPro
               <Button
                 size="lg"
                 className="text-lg px-8 py-6 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700"
-                onClick={() => router.push('/tools', undefined, { locale })}
+                onClick={handleToolsNavigation}
               >
                 {t.exploreToolsButton}
                 <ArrowRight className="ml-2 h-5 w-5" />
@@ -364,7 +406,7 @@ export default function LandingPage({ t, title, description }: InferGetStaticPro
               <Card
                 key={index}
                 className="group hover:shadow-xl transition-all duration-300 cursor-pointer bg-white/80 backdrop-blur-sm dark:bg-slate-800/80 border-white/20"
-                onClick={() => router.push(`/tools?category=${category.query}`, undefined, { locale })}
+                onClick={() => handleCategoryClick(category.query)}
               >
                 <CardContent className="p-6 text-center">
                   {/* 这个 div 用于包裹分类图标，并应用背景渐变和内边距 */}

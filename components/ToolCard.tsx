@@ -4,7 +4,8 @@ import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Card, CardFooter, CardHeader } from "@/components/ui/card"
 import { ExternalLink } from "lucide-react"
-import Image from "next/image"; // 导入 Next.js Image 组件
+import Image from "next/image";
+import { memo, useState } from "react";
 
 interface ToolCardProps {
   logo: string
@@ -19,20 +20,27 @@ interface ToolCardProps {
   // translatedCategory?: string;
 }
 
-export function ToolCard({ logo, name, tagline, category, url, variant = "standard" }: ToolCardProps) {
+// 使用 memo 优化组件，避免不必要的重新渲染
+export const ToolCard = memo(function ToolCard({ 
+  logo, 
+  name, 
+  tagline, 
+  category, 
+  url, 
+  variant = "standard" 
+}: ToolCardProps) {
   const isStandard = variant === "standard"
+  const [imageError, setImageError] = useState(false)
 
-  // 优先使用翻译后的文本，如果提供的话
-  // const displayName = translatedName || name;
-  // const displayTagline = translatedTagline || tagline;
-  // const displayCategory = translatedCategory || category;
-  // 为简化，这里直接使用传入的 props，实际项目中应考虑翻译
+  const handleImageError = () => {
+    setImageError(true)
+  }
 
   return (
     <Card
       className={`
         group cursor-pointer transition-all duration-300 ease-in-out
-        hover:-translate-y-2 hover:shadow-lg h-full flex flex-col justify-between {/*确保卡片高度一致且内容分布合理*/}
+        hover:-translate-y-2 hover:shadow-lg h-full flex flex-col justify-between
         ${isStandard ? "shadow-md rounded-lg border-0" : "border border-border rounded-md shadow-none hover:shadow-md"}
       `}
     >
@@ -40,29 +48,24 @@ export function ToolCard({ logo, name, tagline, category, url, variant = "standa
         <div className="flex items-start justify-between">
           <div className="flex items-center gap-3">
             <div className="h-12 w-12 rounded-lg overflow-hidden bg-muted flex items-center justify-center relative shrink-0">
-              {/* 使用 Next/Image 进行图片优化 */}
-              <Image
-                src={logo || "/placeholder.svg"}
-                alt={`${name} logo`} // SEO: 描述性 alt 文本
-                className="object-contain"
-                fill // 使用 fill 属性，父容器需要有固定尺寸或相对定位
-                sizes="(max-width: 768px) 10vw, 5vw" // 根据您的布局调整
-                onError={(e) => {
-                  // Next/Image 的 onError 处理方式与原生 img 不同
-                  // 可以考虑一个状态来切换到备用内容
-                  const target = e.target as HTMLImageElement;
-                  target.style.display = "none"; // 隐藏损坏的图片
-                  if (target.parentElement) {
-                    const fallbackDiv = target.parentElement.querySelector('.fallback-char');
-                    if (!fallbackDiv) { // 防止重复添加
-                        const fallback = document.createElement('div');
-                        fallback.className = "fallback-char h-full w-full flex items-center justify-center text-xl font-bold bg-muted-foreground/10 text-muted-foreground";
-                        fallback.textContent = name.charAt(0).toUpperCase();
-                        target.parentElement.appendChild(fallback);
-                    }
-                  }
-                }}
-              />
+              {!imageError ? (
+                <Image
+                  src={logo || "/placeholder.svg"}
+                  alt={`${name} Logo`}
+                  width={40}
+                  height={40}
+                  className="object-contain"
+                  loading="lazy" // 添加懒加载
+                  placeholder="blur" // 添加模糊占位符
+                  blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAAIAAoDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAhEAACAQMDBQAAAAAAAAAAAAABAgMABAUGIWGRkqGx0f/EABUBAQEAAAAAAAAAAAAAAAAAAAMF/8QAGhEAAgIDAAAAAAAAAAAAAAAAAAECEgMRkf/aAAwDAQACEQMRAD8AltJagyeH0AthI5xdrLcNM91BF5pX2HaH9bcfaSXWGaRmknyJckliyjqTzSlT54b6bk+h0R//2Q=="
+                  onError={handleImageError}
+                />
+              ) : (
+                // 图片加载失败时的备用显示
+                <div className="h-full w-full flex items-center justify-center text-xl font-bold bg-muted-foreground/10 text-muted-foreground">
+                  {name.charAt(0).toUpperCase()}
+                </div>
+              )}
             </div>
             <div className="flex-1 min-w-0">
               <h3 className="font-semibold text-lg leading-tight truncate" title={name}>{name}</h3>
@@ -75,7 +78,7 @@ export function ToolCard({ logo, name, tagline, category, url, variant = "standa
         </div>
       </CardHeader>
 
-      <CardFooter className="pt-0 mt-auto"> {/* mt-auto 将页脚推到底部 */}
+      <CardFooter className="pt-0 mt-auto">
         <Button
           variant={isStandard ? "default" : "outline"}
           size="sm"
@@ -83,7 +86,7 @@ export function ToolCard({ logo, name, tagline, category, url, variant = "standa
             w-full group-hover:shadow-sm transition-all duration-200
             ${isStandard ? "shadow-sm" : ""}
           `}
-          asChild // 使用 asChild 以允许 Button 包装 <a> 标签
+          asChild
         >
           <a href={url} target="_blank" rel="noopener noreferrer">
             {/* 这里的文本也应该来自翻译文件，例如 t.tryTool.replace('{toolName}', name) */}
@@ -94,26 +97,25 @@ export function ToolCard({ logo, name, tagline, category, url, variant = "standa
       </CardFooter>
     </Card>
   )
-}
+});
 
-// 示例用法组件 - 如果直接显示，这部分也应本地化
+// 优化示例组件
 export default function ToolCardExample() {
   const tools = [
     {
-      logo: "/placeholder.svg?height=40&width=40",
+      logo: "/icons/tools/chatgpt-icon.png",
       name: "ChatGPT",
       tagline: "对话式AI，可帮助完成写作、分析和创意任务",
-      category: "聊天", // 注意：分类也应该是可翻译的或使用固定键
+      category: "聊天",
       url: "https://chat.openai.com",
     },
     {
-      logo: "/placeholder.svg?height=40&width=40",
+      logo: "/icons/tools/midjourney-icon.jpg",
       name: "Midjourney",
       tagline: "为创意专业人士提供AI驱动的图像生成",
       category: "图像",
       url: "https://midjourney.com",
     },
-    // ... 其他工具
   ];
 
   return (

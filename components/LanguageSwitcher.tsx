@@ -10,20 +10,29 @@ import {
 
 export default function LanguageSwitcher() {
   const router = useRouter();
-  const { locales, locale: currentLocale, pathname, asPath, query } = router;
+  const { locales, locale: currentLocale, pathname, asPath } = router;
 
-  const changeLanguage = (newLocale: string) => {
-    router.push({ pathname, query }, asPath, { locale: newLocale });
+  const changeLanguage = async (newLocale: string) => {
+    try {
+      // 构建新的路径
+      const url = pathname;
+      await router.push(url, url, { locale: newLocale });
+    } catch (error) {
+      console.error('语言切换失败:', error);
+      // 备用方案：直接跳转到对应语言的首页
+      window.location.href = newLocale === 'zh' ? '/' : `/${newLocale}`;
+    }
   };
 
-  if (!locales) {
+  // 如果没有配置多语言或只有一种语言，不显示切换器
+  if (!locales || locales.length <= 1) {
     return null;
   }
 
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="ghost" size="icon" aria-label="Change language">
+        <Button variant="ghost" size="icon" aria-label="切换语言 / Change language">
           <Globe className="h-5 w-5" />
         </Button>
       </DropdownMenuTrigger>
@@ -34,8 +43,12 @@ export default function LanguageSwitcher() {
             onClick={() => changeLanguage(locale)}
             disabled={currentLocale === locale}
             aria-current={currentLocale === locale ? "page" : undefined}
+            className={currentLocale === locale ? "bg-accent" : ""}
           >
-            {locale === 'en' ? 'English' : '中文'}
+            <span className="flex items-center gap-2">
+              {locale === 'en' ? '🇺🇸 English' : '🇨🇳 中文'}
+              {currentLocale === locale && <span className="text-xs">(当前)</span>}
+            </span>
           </DropdownMenuItem>
         ))}
       </DropdownMenuContent>
