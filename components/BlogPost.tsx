@@ -5,12 +5,15 @@ import Image from "next/image"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
-import { Copy, Check, ChevronLeft, ChevronRight, Clock } from "lucide-react"
+import { Copy, Check, ChevronLeft, ChevronRight, Clock, ArrowLeft } from "lucide-react" // 添加 ArrowLeft
+import { useRouter } from "next/router" // 添加 useRouter
+import Link from "next/link" // 添加 Link 导入
 
+// 假设您将翻译 't' 作为 prop 传递
 interface BlogPostProps {
   title: string
   date: string
-  readingTime: string
+  readingTime: string // 阅读时间本身可能是数字，后缀从翻译中获取
   heroImage?: string
   children: React.ReactNode
   prevPost?: {
@@ -21,6 +24,13 @@ interface BlogPostProps {
     title: string
     href: string
   }
+  t: { // 添加翻译 prop
+    previousPost: string;
+    nextPost: string;
+    tableOfContents: string;
+    readingTimeSuffix: string; // 例如 "分钟阅读"
+    backButton: string;
+  };
 }
 
 interface TocItem {
@@ -43,7 +53,7 @@ const CodeBlock = ({ children, className, ...props }: any) => {
   }
 
   return (
-    <div className="relative group">
+    <div className="relative group my-6"> {/* Added my-6 for spacing */}
       <pre className="bg-gray-950 text-gray-100 rounded-xl p-4 overflow-x-auto border">
         <code ref={codeRef} className={className} {...props}>
           {children}
@@ -54,6 +64,7 @@ const CodeBlock = ({ children, className, ...props }: any) => {
         variant="ghost"
         className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity h-8 w-8 p-0 bg-gray-800 hover:bg-gray-700 text-gray-300"
         onClick={copyToClipboard}
+        aria-label="Copy code" // SEO: Add aria-label
       >
         {copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
       </Button>
@@ -92,12 +103,12 @@ const mdxComponents = {
     </p>
   ),
   ul: ({ children, ...props }: any) => (
-    <ul className="list-disc list-inside text-gray-700 dark:text-gray-300 mb-4 space-y-2" {...props}>
+    <ul className="list-disc list-inside text-gray-700 dark:text-gray-300 mb-4 space-y-2 pl-4" {...props}> {/* Added pl-4 for better indentation */}
       {children}
     </ul>
   ),
   ol: ({ children, ...props }: any) => (
-    <ol className="list-decimal list-inside text-gray-700 dark:text-gray-300 mb-4 space-y-2" {...props}>
+    <ol className="list-decimal list-inside text-gray-700 dark:text-gray-300 mb-4 space-y-2 pl-4" {...props}> {/* Added pl-4 for better indentation */}
       {children}
     </ol>
   ),
@@ -114,13 +125,13 @@ const mdxComponents = {
       {children}
     </blockquote>
   ),
-  img: ({ src, alt, ...props }: any) => (
+  img: ({ src, alt, ...props }: any) => ( // Ensure alt is always descriptive
     <div className="my-6">
       <Image
         src={src || "/placeholder.svg"}
-        alt={alt}
-        width={720}
-        height={400}
+        alt={alt || "Blog post image"} // SEO: Provide default if alt is missing
+        width={720} // Provide appropriate default or fetched width
+        height={400} // Provide appropriate default or fetched height
         className="rounded-lg w-full h-auto"
         {...props}
       />
@@ -133,19 +144,20 @@ const mdxComponents = {
       href={href}
       className="text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 underline"
       {...props}
+      // SEO: Add rel="noopener noreferrer" for external links if opening in new tab
     >
       {children}
     </a>
   ),
 }
 
-const TableOfContents = ({ toc, activeId }: { toc: TocItem[]; activeId: string }) => {
+const TableOfContents = ({ toc, activeId, t }: { toc: TocItem[]; activeId: string; t: BlogPostProps['t'] }) => {
   if (toc.length === 0) return null
 
   return (
-    <Card className="p-4 sticky top-8">
-      <h3 className="font-semibold text-gray-900 dark:text-gray-100 mb-3">Table of Contents</h3>
-      <nav>
+    <Card className="p-4 sticky top-24"> {/* Adjusted top for sticky header */}
+      <h3 className="font-semibold text-gray-900 dark:text-gray-100 mb-3">{t.tableOfContents}</h3>
+      <nav aria-label={t.tableOfContents}> {/* SEO: Add aria-label */}
         <ul className="space-y-2">
           {toc.map((item) => (
             <li key={item.id}>
@@ -167,15 +179,15 @@ const TableOfContents = ({ toc, activeId }: { toc: TocItem[]; activeId: string }
   )
 }
 
-export default function BlogPost({ title, date, readingTime, heroImage, children, prevPost, nextPost }: BlogPostProps) {
+export default function BlogPost({ title, date, readingTime, heroImage, children, prevPost, nextPost, t }: BlogPostProps) {
   const [toc, setToc] = useState<TocItem[]>([])
   const [activeId, setActiveId] = useState("")
   const contentRef = useRef<HTMLDivElement>(null)
+  const router = useRouter(); // 初始化 router
 
   useEffect(() => {
     if (!contentRef.current) return
 
-    // Generate table of contents
     const headings = contentRef.current.querySelectorAll("h1, h2, h3")
     const tocItems: TocItem[] = []
 
@@ -185,7 +197,7 @@ export default function BlogPost({ title, date, readingTime, heroImage, children
           ?.toLowerCase()
           .replace(/[^a-z0-9]+/g, "-")
           .replace(/(^-|-$)/g, "") || `heading-${index}`
-      heading.id = id
+      heading.id = id // Ensure headings have IDs for TOC links
 
       tocItems.push({
         id,
@@ -196,7 +208,6 @@ export default function BlogPost({ title, date, readingTime, heroImage, children
 
     setToc(tocItems)
 
-    // Set up intersection observer for active heading
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
@@ -205,16 +216,19 @@ export default function BlogPost({ title, date, readingTime, heroImage, children
           }
         })
       },
-      { rootMargin: "-20% 0% -80% 0%" },
+      { rootMargin: "-20% 0px -80% 0px" }, // Adjusted rootMargin
     )
 
     headings.forEach((heading) => observer.observe(heading))
 
-    return () => observer.disconnect()
-  }, [children])
+    return () => {
+      headings.forEach((heading) => observer.unobserve(heading));
+      observer.disconnect()
+    }
+  }, [children]) // Re-run if children change (e.g., dynamic content)
 
   const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString("en-US", {
+    return new Date(dateString).toLocaleDateString('zh-CN', { // 使用默认中文本地化
       year: "numeric",
       month: "long",
       day: "numeric",
@@ -222,13 +236,12 @@ export default function BlogPost({ title, date, readingTime, heroImage, children
   }
 
   return (
-    <article className="min-h-screen bg-white dark:bg-gray-950">
-      {/* Hero Image */}
+    <article className="min-h-screen bg-white dark:bg-gray-950 py-8"> {/* Added py-8 for top/bottom padding */}
       {heroImage && (
         <div className="w-full mb-8">
           <Image
             src={heroImage || "/placeholder.svg"}
-            alt={title}
+            alt={title} // SEO: 确保这是描述性的
             width={1200}
             height={600}
             className="w-full h-64 md:h-96 object-cover rounded-xl"
@@ -238,10 +251,15 @@ export default function BlogPost({ title, date, readingTime, heroImage, children
       )}
 
       <div className="lg:flex lg:gap-8 lg:max-w-6xl lg:mx-auto lg:px-4">
-        {/* Main Content */}
         <div className="lg:flex-1">
           <div className="max-w-3xl mx-auto px-4">
-            {/* Header */}
+            <div className="mb-6">
+              <Button variant="outline" onClick={() => router.back()} className="group text-sm">
+                <ArrowLeft className="h-4 w-4 mr-2 group-hover:-translate-x-1 transition-transform" />
+                {t.backButton}
+              </Button>
+            </div>
+
             <header className="mb-8">
               <h1 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-gray-100 mb-4">{title}</h1>
               <div className="flex items-center gap-4 text-gray-600 dark:text-gray-400">
@@ -249,57 +267,42 @@ export default function BlogPost({ title, date, readingTime, heroImage, children
                 <span>•</span>
                 <div className="flex items-center gap-1">
                   <Clock className="h-4 w-4" />
-                  <span>{readingTime}</span>
+                  <span>{readingTime} {t.readingTimeSuffix}</span>
                 </div>
               </div>
             </header>
 
             <Separator className="mb-8" />
 
-            {/* Content */}
-            <div ref={contentRef} className="prose prose-lg max-w-none">
-              {React.Children.map(children, (child) => {
-                if (React.isValidElement(child)) {
-                  return React.cloneElement(child, {
-                    components: { ...mdxComponents, ...(child.props.components || {}) },
-                  })
-                }
-                return child
-              })}
+            <div ref={contentRef} className="prose prose-lg dark:prose-invert max-w-none"> {/* Added dark:prose-invert */}
+              {children}
             </div>
 
-            {/* Navigation */}
             {(prevPost || nextPost) && (
               <div className="mt-12 pt-8 border-t border-gray-200 dark:border-gray-800">
                 <div className="flex justify-between items-center">
                   {prevPost ? (
-                    <a
-                      href={prevPost.href}
-                      className="flex items-center gap-2 text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 transition-colors group"
-                    >
+                    <Link href={prevPost.href} className="flex items-center gap-2 text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 transition-colors group">
                       <ChevronLeft className="h-4 w-4 group-hover:-translate-x-1 transition-transform" />
                       <div className="text-left">
-                        <div className="text-sm text-gray-500 dark:text-gray-400">Previous</div>
+                        <div className="text-sm text-gray-500 dark:text-gray-400">{t.previousPost}</div>
                         <div className="font-medium">{prevPost.title}</div>
                       </div>
-                    </a>
+                    </Link>
                   ) : (
-                    <div />
+                    <div /> // Placeholder for alignment
                   )}
 
                   {nextPost ? (
-                    <a
-                      href={nextPost.href}
-                      className="flex items-center gap-2 text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 transition-colors group text-right"
-                    >
+                    <Link href={nextPost.href} className="flex items-center gap-2 text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 transition-colors group text-right">
                       <div className="text-right">
-                        <div className="text-sm text-gray-500 dark:text-gray-400">Next</div>
+                        <div className="text-sm text-gray-500 dark:text-gray-400">{t.nextPost}</div>
                         <div className="font-medium">{nextPost.title}</div>
                       </div>
                       <ChevronRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
-                    </a>
+                    </Link>
                   ) : (
-                    <div />
+                    <div /> // Placeholder for alignment
                   )}
                 </div>
               </div>
@@ -307,10 +310,11 @@ export default function BlogPost({ title, date, readingTime, heroImage, children
           </div>
         </div>
 
-        {/* Table of Contents Sidebar - Desktop Only */}
-        <aside className="hidden lg:block lg:w-64 lg:flex-shrink-0">
-          <TableOfContents toc={toc} activeId={activeId} />
-        </aside>
+        {toc.length > 0 && (
+          <aside className="hidden lg:block lg:w-64 lg:flex-shrink-0 mt-10 lg:mt-0"> {/* Added mt-10 for mobile, lg:mt-0 for desktop */}
+            <TableOfContents toc={toc} activeId={activeId} t={t} />
+          </aside>
+        )}
       </div>
     </article>
   )
