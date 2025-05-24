@@ -21,6 +21,11 @@ const nextConfig = {
     config.resolve.alias['@'] = resolve(__dirname);
     return config;
   },
+  i18n: {
+    locales: ['zh', 'en'],
+    defaultLocale: 'zh',
+    localeDetection: true,
+  },
 };
 
 export default nextConfig;

@@ -28,7 +28,7 @@ async function loadTranslations(locale: string | undefined, defaultLocale: strin
   try {
     const translations = await import(`@/locales/${currentLocale}/common.json`);
     return translations.default;
-  } catch (error) {
+  } catch {
     console.warn(`无法加载语言环境 ${currentLocale} 的翻译。正在回退到默认语言 ${defaultLocale}。`);
     const defaultTranslations = await import(`@/locales/${defaultLocale}/common.json`);
     return defaultTranslations.default;
