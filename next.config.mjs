@@ -5,6 +5,9 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  // 强制使用 Pages Router
+  pageExtensions: ['tsx', 'ts', 'jsx', 'js'],
+  
   eslint: {
     ignoreDuringBuilds: true,
   },
@@ -13,6 +16,9 @@ const nextConfig = {
   },
   images: {
     unoptimized: true,
+    // 优化图片配置
+    formats: ['image/webp', 'image/avif'],
+    minimumCacheTTL: 60 * 60 * 24 * 30, // 30天缓存
   },
   experimental: {
     serverActions: {},
@@ -21,10 +27,22 @@ const nextConfig = {
     config.resolve.alias['@'] = resolve(__dirname);
     return config;
   },
+  // Pages Router 专用 i18n 配置
   i18n: {
     locales: ['zh', 'en'],
     defaultLocale: 'zh',
-    localeDetection: true,
+    localeDetection: false, // 修复警告，设为 false
+  },
+  // 添加重定向规则修复博客跳转问题
+  async redirects() {
+    return [
+      // 确保博客路由正确
+      {
+        source: '/blog',
+        destination: '/blog',
+        permanent: false,
+      },
+    ];
   },
 };
 
