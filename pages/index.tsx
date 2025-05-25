@@ -119,6 +119,22 @@ export default function LandingPage({ title, description }: InferGetStaticPropsT
       url: "https://runwayml.com",
       featured: false,
       rating: 4.3
+    },
+    {
+      name: "Gemini",
+      description: "Google's advanced AI model for multimodal understanding and generation",
+      image: "/icons/tools/gemini-icon.svg",
+      url: "https://gemini.google.com",
+      featured: true,
+      rating: 4.6
+    },
+    {
+      name: "DeepSeek",
+      description: "Advanced AI model for coding and reasoning tasks",
+      image: "/icons/tools/deepseek-icon.svg",
+      url: "https://deepseek.com",
+      featured: false,
+      rating: 4.4
     }
   ], []);
 
@@ -166,6 +182,10 @@ export default function LandingPage({ title, description }: InferGetStaticPropsT
     '/icons/categories/code-icon.svg',
     '/icons/tools/chatgpt-icon.svg',
     '/icons/tools/midjourney-icon.svg',
+    '/icons/tools/gemini-icon.svg',
+    '/icons/tools/claude-icon.svg',
+    '/icons/tools/deepseek-icon.svg',
+    '/icons/tools/stable-diffusion-icon.svg',
   ], []);
 
   return (

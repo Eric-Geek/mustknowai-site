@@ -95,7 +95,7 @@ const mockToolsData: Tool[] = [
     name: "Stable Diffusion",
     description: "Open-source AI model for generating high-quality images from text",
     category: "Image",
-    image: "/placeholder.svg?height=64&width=64&text=SD",
+    image: "/icons/tools/stable-diffusion-icon.svg",
     url: "https://stability.ai/stable-diffusion",
     tags: ["image generation", "open source", "text-to-image", "AI model", "free"],
     featured: false,
@@ -106,7 +106,7 @@ const mockToolsData: Tool[] = [
     name: "Cursor",
     description: "AI-powered code editor built for productivity and collaboration",
     category: "Code",
-    image: "/placeholder.svg?height=64&width=64&text=CR",
+    image: "/icons/tools/cursor-icon.svg",
     url: "https://cursor.sh",
     tags: ["code editor", "AI assistant", "development", "collaboration", "IDE"],
     featured: false,
@@ -133,6 +133,28 @@ const mockToolsData: Tool[] = [
     tags: ["3D", "video generation", "AI video", "content creation", "visual effects"],
     featured: false,
     rating: 4.1
+  },
+  {
+    id: "11",
+    name: "Gemini",
+    description: "Google's advanced AI model for multimodal understanding and generation",
+    category: "Writing",
+    image: "/icons/tools/gemini-icon.svg",
+    url: "https://gemini.google.com",
+    tags: ["conversation", "multimodal", "Google", "AI assistant", "reasoning"],
+    featured: true,
+    rating: 4.6
+  },
+  {
+    id: "12",
+    name: "DeepSeek",
+    description: "Advanced AI model for coding and reasoning tasks",
+    category: "Code",
+    image: "/icons/tools/deepseek-icon.svg",
+    url: "https://deepseek.com",
+    tags: ["coding", "reasoning", "AI model", "development", "research"],
+    featured: false,
+    rating: 4.4
   }
 ];
 

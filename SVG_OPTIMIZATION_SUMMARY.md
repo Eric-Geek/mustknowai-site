@@ -14,20 +14,33 @@
   - 更新了 `mockToolsData` 中的工具图标路径
   - 将 Perplexity AI 从占位符 SVG 更新为实际的 SVG 图标
 
-### 2. 创建的新 SVG 图标文件
-在 `public/icons/categories/` 目录下创建了 4 个分类图标：
+### 2. 使用用户上传的 SVG 图标文件
+项目中使用了用户上传的高质量 SVG 图标：
 
-- **writing-icon.svg**: 蓝色主题，文档和勾选标记设计
-- **image-icon.svg**: 绿色主题，图片和山景设计  
-- **video-icon.svg**: 紫色主题，摄像机和播放按钮设计
-- **code-icon.svg**: 红色主题，代码符号和斜杠设计
+**分类图标** (4个):
+- **writing-icon.svg**: 写作相关图标
+- **image-icon.svg**: 图片处理图标  
+- **video-icon.svg**: 视频编辑图标
+- **code-icon.svg**: 代码开发图标
 
-每个图标都包含：
-- 64x64 像素的视图框
-- 圆角矩形背景
-- 白色内容区域
-- 彩色主题元素
-- 右上角的橙色勾选徽章
+**工具图标** (11个):
+- **chatgpt-icon.svg**: OpenAI ChatGPT 官方图标
+- **claude-icon.svg**: Anthropic Claude 图标
+- **gemini-icon.svg**: Google Gemini 图标
+- **deepseek-icon.svg**: DeepSeek AI 图标
+- **midjourney-icon.svg**: Midjourney 图标
+- **stable-diffusion-icon.svg**: Stable Diffusion 图标
+- **github-copilot-icon.svg**: GitHub Copilot 图标
+- **notion-icon.svg**: Notion 图标
+- **perplexity-icon.svg**: Perplexity AI 图标
+- **runway-icon.svg**: RunwayML 图标
+- **cursor-icon.svg**: Cursor 编辑器图标
+
+所有图标都是：
+- 高质量的 SVG 矢量格式
+- 官方或专业设计的品牌图标
+- 完全可伸缩且清晰
+- 已优化为 React 组件
 
 ### 3. Next.js 配置优化
 
