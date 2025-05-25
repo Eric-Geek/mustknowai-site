@@ -51,7 +51,7 @@ const mockToolsData: Tool[] = [
     name: "GitHub Copilot",
     description: "AI pair programmer that helps you write code faster and smarter",
     category: "Code",
-    image: "/icons/tools/Github-Copilot.svg",
+    image: "/icons/tools/github-copilot-icon.svg",
     url: "https://github.com/features/copilot",
     tags: ["coding", "programming", "development", "autocomplete", "IDE"],
     featured: false,

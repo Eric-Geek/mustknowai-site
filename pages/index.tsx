@@ -91,7 +91,7 @@ export default function LandingPage({ title, description }: InferGetStaticPropsT
     {
       name: "GitHub Copilot",
       description: "AI pair programmer that helps you write code faster and smarter",
-      image: "/icons/tools/Github-Copilot.svg",
+      image: "/icons/tools/github-copilot-icon.svg",
       url: "https://github.com/features/copilot",
       featured: false,
       rating: 4.6
