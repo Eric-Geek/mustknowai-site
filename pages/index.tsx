@@ -44,25 +44,25 @@ export default function LandingPage({ title, description }: InferGetStaticPropsT
     {
       name: t.categoryWriting,
       description: t.categoryWritingDesc,
-      icon: "/icons/categories/writing-icon.png",
+      icon: "/icons/categories/writing-icon.svg",
       query: "Writing"
     },
     {
       name: t.categoryImage,
       description: t.categoryImageDesc,
-      icon: "/icons/categories/image-icon.png",
+      icon: "/icons/categories/image-icon.svg",
       query: "Image"
     },
     {
       name: t.categoryVideo,
       description: t.categoryVideoDesc,
-      icon: "/icons/categories/video-icon.png",
+      icon: "/icons/categories/video-icon.svg",
       query: "Video"
     },
     {
       name: t.categoryCode,
       description: t.categoryCodeDesc,
-      icon: "/icons/categories/code-icon.png",
+      icon: "/icons/categories/code-icon.svg",
       query: "Code"
     }
   ], []);
@@ -72,7 +72,7 @@ export default function LandingPage({ title, description }: InferGetStaticPropsT
     {
       name: "ChatGPT",
       description: "OpenAI's powerful conversational AI for writing, coding, and analysis",
-      image: "/icons/tools/chatgpt-icon.png",
+      image: "/icons/tools/chatgpt-icon.svg",
       url: "https://chat.openai.com",
       featured: true,
       rating: 4.8
@@ -80,7 +80,7 @@ export default function LandingPage({ title, description }: InferGetStaticPropsT
     {
       name: "Midjourney",
       description: "Create stunning AI-generated artwork and images with simple prompts",
-      image: "/icons/tools/midjourney-icon.jpg",
+      image: "/icons/tools/midjourney-icon.svg",
       url: "https://midjourney.com",
       featured: true,
       rating: 4.7
@@ -88,7 +88,7 @@ export default function LandingPage({ title, description }: InferGetStaticPropsT
     {
       name: "GitHub Copilot",
       description: "AI pair programmer that helps you write code faster and smarter",
-      image: "/icons/tools/github-copilot-icon.jpg",
+      image: "/icons/tools/Github-Copilot.svg",
       url: "https://github.com/features/copilot",
       featured: false,
       rating: 4.6
@@ -96,7 +96,7 @@ export default function LandingPage({ title, description }: InferGetStaticPropsT
     {
       name: "Claude AI",
       description: "Anthropic's helpful AI assistant for analysis, writing, and reasoning",
-      image: "/icons/tools/claude-icon.jpg",
+      image: "/icons/tools/claude-icon.svg",
       url: "https://claude.ai",
       featured: false,
       rating: 4.5
@@ -104,7 +104,7 @@ export default function LandingPage({ title, description }: InferGetStaticPropsT
     {
       name: "Notion AI",
       description: "AI-powered productivity assistant integrated into your workspace",
-      image: "/icons/tools/notion-icon.jpg",
+      image: "/icons/tools/notion-icon.svg",
       url: "https://notion.so/product/ai",
       featured: false,
       rating: 4.4
@@ -112,7 +112,7 @@ export default function LandingPage({ title, description }: InferGetStaticPropsT
     {
       name: "RunwayML",
       description: "Professional AI video editing and generation platform",
-      image: "/icons/tools/runway-icon.jpg",
+      image: "/icons/tools/runway-icon.svg",
       url: "https://runwayml.com",
       featured: false,
       rating: 4.3
@@ -322,9 +322,10 @@ export default function LandingPage({ title, description }: InferGetStaticPropsT
                       <Image
                         src={category.icon}
                         alt={category.name}
-                        width={40}
-                        height={40}
+                        width={48}
+                        height={48}
                         className="object-contain transition-transform duration-300 group-hover:scale-110"
+                        priority={index < 4} // 优先加载前4个分类图标
                       />
                     </div>
                     

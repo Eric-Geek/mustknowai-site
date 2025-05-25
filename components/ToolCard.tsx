@@ -81,13 +81,14 @@ export const ToolCard = memo(function ToolCard({
                 alt={`${name} Logo`}
                 width={isStandard ? 64 : 48}
                 height={isStandard ? 64 : 48}
-                className="object-contain p-2"
+                className="object-contain p-1.5 transition-transform duration-300 group-hover:scale-110"
                 loading="lazy"
                 onError={handleImageError}
+                priority={featured} // 优先加载特色工具的图标
               />
             ) : (
               // Fallback display when image fails to load
-              <div className="h-full w-full flex items-center justify-center text-2xl font-bold bg-gradient-to-br from-blue-500 to-purple-500 text-white">
+              <div className="h-full w-full flex items-center justify-center text-2xl font-bold bg-gradient-to-br from-blue-500 to-purple-500 text-white transition-transform duration-300 group-hover:scale-110">
                 {name.charAt(0).toUpperCase()}
               </div>
             )}
