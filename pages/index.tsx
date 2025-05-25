@@ -23,6 +23,9 @@ import { useMemo, useCallback } from 'react';
 import { t } from '@/lib/translations';
 import { ToolCard } from "@/components/ToolCard";
 import StatsSection from "@/components/StatsSection";
+import SmartIcon from "@/components/SmartIcon";
+import SVGPreloader from "@/components/SVGPreloader";
+import PerformanceMonitor from "@/components/PerformanceMonitor";
 
 export const getStaticProps: GetStaticProps = async () => {
   const title = `${t.siteName} - ${t.heroTitle.split('—')[1]?.trim() || 'AI Tools & Insights'}`;
@@ -155,8 +158,32 @@ export default function LandingPage({ title, description }: InferGetStaticPropsT
     router.push(`/tools?category=${query}`);
   }, [router]);
 
+  // 预加载关键 SVG 图标
+  const criticalSVGs = useMemo(() => [
+    '/icons/categories/writing-icon.svg',
+    '/icons/categories/image-icon.svg',
+    '/icons/categories/video-icon.svg',
+    '/icons/categories/code-icon.svg',
+    '/icons/tools/chatgpt-icon.svg',
+    '/icons/tools/midjourney-icon.svg',
+  ], []);
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 dark:from-slate-950 dark:via-blue-950 dark:to-indigo-950">
+      {/* SVG 预加载器 */}
+      <SVGPreloader icons={criticalSVGs} />
+      
+      {/* 性能监控 */}
+      <PerformanceMonitor 
+        enableLogging={process.env.NODE_ENV === 'development'}
+        onMetricsUpdate={(metrics) => {
+          // 在生产环境中可以发送到分析服务
+          if (process.env.NODE_ENV === 'development') {
+            console.log('Performance metrics:', metrics);
+          }
+        }}
+      />
+      
       <Head>
         <title>{title}</title>
         <meta name="description" content={description} />
@@ -319,13 +346,13 @@ export default function LandingPage({ title, description }: InferGetStaticPropsT
                 <CardContent className="p-8 text-center relative z-10">
                   <div className="relative mb-6">
                     <div className="w-20 h-20 mx-auto rounded-2xl overflow-hidden bg-gradient-to-br from-blue-50 to-purple-50 dark:from-blue-950/50 dark:to-purple-950/50 flex items-center justify-center shadow-lg ring-1 ring-gray-200/50 dark:ring-gray-700/50 group-hover:scale-110 transition-transform duration-300">
-                      <Image
-                        src={category.icon}
+                      <SmartIcon
+                        name={category.query}
+                        type="category"
+                        fallbackSrc={category.icon}
+                        size={48}
+                        priority={index < 4}
                         alt={category.name}
-                        width={48}
-                        height={48}
-                        className="object-contain transition-transform duration-300 group-hover:scale-110"
-                        priority={index < 4} // 优先加载前4个分类图标
                       />
                     </div>
                     

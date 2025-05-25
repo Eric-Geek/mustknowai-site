@@ -4,8 +4,8 @@ import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Card, CardFooter, CardHeader } from "@/components/ui/card"
 import { ExternalLink, Star } from "lucide-react"
-import Image from "next/image";
-import { memo, useState } from "react";
+import { memo } from "react";
+import SmartIcon from "./SmartIcon";
 
 interface ToolCardProps {
   logo: string
@@ -30,12 +30,6 @@ export const ToolCard = memo(function ToolCard({
   rating
 }: ToolCardProps) {
   const isStandard = variant === "standard"
-  const [imageError, setImageError] = useState(false)
-  const [isHovered, setIsHovered] = useState(false)
-
-  const handleImageError = () => {
-    setImageError(true)
-  }
 
   return (
     <Card
@@ -47,8 +41,7 @@ export const ToolCard = memo(function ToolCard({
         ${featured ? "ring-2 ring-blue-500/20 shadow-lg" : "shadow-md"}
         ${isStandard ? "rounded-2xl" : "rounded-xl"}
       `}
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
+
     >
       {/* Featured badge */}
       {featured && (
@@ -61,11 +54,7 @@ export const ToolCard = memo(function ToolCard({
       )}
 
       {/* Gradient overlay for hover effect */}
-      <div className={`
-        absolute inset-0 bg-gradient-to-br from-blue-500/5 to-purple-500/5 
-        transition-opacity duration-500 rounded-2xl
-        ${isHovered ? 'opacity-100' : 'opacity-0'}
-      `} />
+      <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 to-purple-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-2xl" />
 
       <CardHeader className="pb-4 relative z-10">
         <div className="flex items-start gap-4">
@@ -75,23 +64,15 @@ export const ToolCard = memo(function ToolCard({
             transition-transform duration-300 group-hover:scale-110
             ${isStandard ? "w-16 h-16" : "w-12 h-12"}
           `}>
-            {!imageError ? (
-              <Image
-                src={logo || "/placeholder.svg"}
-                alt={`${name} Logo`}
-                width={isStandard ? 64 : 48}
-                height={isStandard ? 64 : 48}
-                className="object-contain p-1.5 transition-transform duration-300 group-hover:scale-110"
-                loading="lazy"
-                onError={handleImageError}
-                priority={featured} // 优先加载特色工具的图标
-              />
-            ) : (
-              // Fallback display when image fails to load
-              <div className="h-full w-full flex items-center justify-center text-2xl font-bold bg-gradient-to-br from-blue-500 to-purple-500 text-white transition-transform duration-300 group-hover:scale-110">
-                {name.charAt(0).toUpperCase()}
-              </div>
-            )}
+            <SmartIcon
+              name={name}
+              type="tool"
+              fallbackSrc={logo}
+              size={isStandard ? 64 : 48}
+              priority={featured}
+              alt={`${name} Logo`}
+              className="p-1.5"
+            />
           </div>
           
           <div className="flex-1 min-w-0">
