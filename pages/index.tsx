@@ -1,25 +1,27 @@
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
+import { Sheet, SheetContent, SheetTrigger, SheetHeader, SheetTitle } from "@/components/ui/sheet"
+import { Separator } from "@/components/ui/separator"
 import Head from 'next/head';
 import Image from 'next/image'; // Import Next.js Image component
 import {
-  Twitter,
-  Github,
   Calendar,
   ArrowRight,
   Menu,
+  Twitter,
+  Github,
+  Home,
+  Wrench,
+  BookOpen,
+  ExternalLink,
+  ChevronRight,
   Brain as DefaultBrainIcon, // Keep Brain as website Logo
-  // 如果不再使用 Lucide 作为分类图标的后备，可以移除下面这些
-  // PenTool as DefaultPenTool,
-  // ImageIcon as DefaultImageIcon,
-  // Video as DefaultVideoIcon,
-  // Code as DefaultCodeIcon,
 } from "lucide-react"
 import { GetStaticProps, InferGetStaticPropsType } from 'next';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
-import { useMemo, useCallback } from 'react';
+import { useMemo, useCallback, useState } from 'react';
 import { t } from '@/lib/translations';
 import { ToolCard } from "@/components/ToolCard";
 import StatsSection from "@/components/StatsSection";
@@ -41,6 +43,7 @@ export const getStaticProps: GetStaticProps = async () => {
 
 export default function LandingPage({ title, description }: InferGetStaticPropsType<typeof getStaticProps>) {
   const router = useRouter();
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   // Tool categories data
   const categories = useMemo(() => [
@@ -234,9 +237,81 @@ export default function LandingPage({ title, description }: InferGetStaticPropsT
           </nav>
 
           <div className="md:hidden flex items-center">
-            <Button variant="ghost" size="icon" aria-label="Toggle menu">
-              <Menu className="h-5 w-5" />
-            </Button>
+            <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
+              <SheetTrigger asChild>
+                <Button variant="ghost" size="icon" aria-label="打开菜单">
+                  <Menu className="h-5 w-5" />
+                </Button>
+              </SheetTrigger>
+              <SheetContent side="right" className="w-[300px] sm:w-[350px] p-0">
+                <div className="flex flex-col h-full">
+                  <SheetHeader className="p-6 pb-4">
+                    <SheetTitle className="text-xl font-bold text-slate-900 dark:text-white">
+                      {t.siteName}
+                    </SheetTitle>
+                  </SheetHeader>
+                  <Separator />
+                  <div className="flex-1 overflow-y-auto">
+                    <nav className="p-4 space-y-2">
+                      <div className="text-sm font-medium text-slate-500 dark:text-slate-400 mb-4">
+                        导航
+                      </div>
+                      <Button
+                        variant={router.pathname === "/" ? "secondary" : "ghost"}
+                        className="w-full justify-start h-auto p-4 text-left"
+                        onClick={() => {
+                          setMobileMenuOpen(false);
+                          router.push('/');
+                        }}
+                      >
+                        <div className="flex items-center w-full">
+                          <Home className="h-5 w-5 mr-3" />
+                          <div className="flex-1">
+                            <div className="font-medium">{t.navHome}</div>
+                            <div className="text-sm text-slate-500 dark:text-slate-400">返回首页</div>
+                          </div>
+                          <ChevronRight className="h-4 w-4 text-slate-400" />
+                        </div>
+                      </Button>
+                      <Button
+                        variant={router.pathname === "/tools" ? "secondary" : "ghost"}
+                        className="w-full justify-start h-auto p-4 text-left"
+                        onClick={() => {
+                          setMobileMenuOpen(false);
+                          router.push('/tools');
+                        }}
+                      >
+                        <div className="flex items-center w-full">
+                          <Wrench className="h-5 w-5 mr-3" />
+                          <div className="flex-1">
+                            <div className="font-medium">{t.navTools}</div>
+                            <div className="text-sm text-slate-500 dark:text-slate-400">探索 AI 工具</div>
+                          </div>
+                          <ChevronRight className="h-4 w-4 text-slate-400" />
+                        </div>
+                      </Button>
+                      <Button
+                        variant={router.pathname.startsWith("/blog") ? "secondary" : "ghost"}
+                        className="w-full justify-start h-auto p-4 text-left"
+                        onClick={() => {
+                          setMobileMenuOpen(false);
+                          router.push('/blog');
+                        }}
+                      >
+                        <div className="flex items-center w-full">
+                          <BookOpen className="h-5 w-5 mr-3" />
+                          <div className="flex-1">
+                            <div className="font-medium">{t.navBlog}</div>
+                            <div className="text-sm text-slate-500 dark:text-slate-400">阅读最新文章</div>
+                          </div>
+                          <ChevronRight className="h-4 w-4 text-slate-400" />
+                        </div>
+                      </Button>
+                    </nav>
+                  </div>
+                </div>
+              </SheetContent>
+            </Sheet>
           </div>
         </div>
       </header>
@@ -458,11 +533,35 @@ export default function LandingPage({ title, description }: InferGetStaticPropsT
               <span className="text-xl font-bold">{t.siteName}</span>
             </div>
             <div className="flex space-x-6">
-              <Button variant="ghost" size="icon" className="text-slate-400 hover:text-white">
-                <Twitter className="h-5 w-5" />
+              <Button 
+                variant="ghost" 
+                size="icon" 
+                className="text-slate-400 hover:text-white transition-all duration-300 hover:scale-110"
+                asChild
+              >
+                <a 
+                  href="https://twitter.com/mustknowai" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  aria-label="关注我们的 Twitter"
+                >
+                  <Twitter className="h-5 w-5" />
+                </a>
               </Button>
-              <Button variant="ghost" size="icon" className="text-slate-400 hover:text-white">
-                <Github className="h-5 w-5" />
+              <Button 
+                variant="ghost" 
+                size="icon" 
+                className="text-slate-400 hover:text-white transition-all duration-300 hover:scale-110"
+                asChild
+              >
+                <a 
+                  href="https://github.com/yourusername/mustknowai-site" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  aria-label="查看我们的 GitHub"
+                >
+                  <Github className="h-5 w-5" />
+                </a>
               </Button>
             </div>
           </div>

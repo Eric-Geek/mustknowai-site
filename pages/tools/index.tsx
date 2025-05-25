@@ -1,7 +1,9 @@
 "use client"
 
 import { useState, useMemo, useEffect } from "react"
-import { Brain, Menu } from "lucide-react"
+import { Brain, Menu, Home, Wrench, BookOpen, ChevronRight } from "lucide-react"
+import { Sheet, SheetContent, SheetTrigger, SheetHeader, SheetTitle } from "@/components/ui/sheet"
+import { Separator } from "@/components/ui/separator"
 import { Button } from "@/components/ui/button"
 import { ToolCard } from "@/components/ToolCard"
 import AdvancedSearch from "@/components/AdvancedSearch"
@@ -181,6 +183,7 @@ export default function AIToolsDirectory({ tools = [], pageTitle, pageDescriptio
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const [sortBy, setSortBy] = useState("relevance");
   const [displayCount, setDisplayCount] = useState(12);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   useEffect(() => {
     const categoryFromQuery = typeof query.category === 'string' ? query.category : "All Categories";
@@ -293,9 +296,77 @@ export default function AIToolsDirectory({ tools = [], pageTitle, pageDescriptio
             </Link>
           </nav>
           <div className="md:hidden flex items-center">
-            <Button variant="ghost" size="icon" aria-label="Toggle menu">
-              <Menu className="h-5 w-5" />
-            </Button>
+            <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
+              <SheetTrigger asChild>
+                <Button variant="ghost" size="icon" aria-label="打开菜单">
+                  <Menu className="h-5 w-5" />
+                </Button>
+              </SheetTrigger>
+              <SheetContent side="right" className="w-[300px] sm:w-[350px] p-0">
+                <div className="flex flex-col h-full">
+                  <SheetHeader className="p-6 pb-4">
+                    <SheetTitle className="text-xl font-bold text-slate-900 dark:text-white">
+                      {t.siteName}
+                    </SheetTitle>
+                  </SheetHeader>
+                  <Separator />
+                  <div className="flex-1 overflow-y-auto">
+                    <nav className="p-4 space-y-2">
+                      <div className="text-sm font-medium text-slate-500 dark:text-slate-400 mb-4">
+                        导航
+                      </div>
+                      <Button
+                        variant="ghost"
+                        className="w-full justify-start h-auto p-4 text-left"
+                        onClick={() => {
+                          setMobileMenuOpen(false);
+                          router.push('/');
+                        }}
+                      >
+                        <div className="flex items-center w-full">
+                          <Home className="h-5 w-5 mr-3" />
+                          <div className="flex-1">
+                            <div className="font-medium">{t.navHome}</div>
+                            <div className="text-sm text-slate-500 dark:text-slate-400">返回首页</div>
+                          </div>
+                          <ChevronRight className="h-4 w-4 text-slate-400" />
+                        </div>
+                      </Button>
+                      <Button
+                        variant="secondary"
+                        className="w-full justify-start h-auto p-4 text-left bg-blue-50 dark:bg-blue-950/50 text-blue-700 dark:text-blue-300"
+                        onClick={() => setMobileMenuOpen(false)}
+                      >
+                        <div className="flex items-center w-full">
+                          <Wrench className="h-5 w-5 mr-3 text-blue-600 dark:text-blue-400" />
+                          <div className="flex-1">
+                            <div className="font-medium">{t.navTools}</div>
+                            <div className="text-sm text-slate-500 dark:text-slate-400">当前页面</div>
+                          </div>
+                        </div>
+                      </Button>
+                      <Button
+                        variant="ghost"
+                        className="w-full justify-start h-auto p-4 text-left"
+                        onClick={() => {
+                          setMobileMenuOpen(false);
+                          router.push('/blog');
+                        }}
+                      >
+                        <div className="flex items-center w-full">
+                          <BookOpen className="h-5 w-5 mr-3" />
+                          <div className="flex-1">
+                            <div className="font-medium">{t.navBlog}</div>
+                            <div className="text-sm text-slate-500 dark:text-slate-400">阅读最新文章</div>
+                          </div>
+                          <ChevronRight className="h-4 w-4 text-slate-400" />
+                        </div>
+                      </Button>
+                    </nav>
+                  </div>
+                </div>
+              </SheetContent>
+            </Sheet>
           </div>
         </div>
       </header>
