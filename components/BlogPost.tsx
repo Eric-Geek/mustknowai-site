@@ -5,9 +5,9 @@ import Image from "next/image"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
-import { Copy, Check, ChevronLeft, ChevronRight, Clock, ArrowLeft } from "lucide-react" // 添加 ArrowLeft
-import { useRouter } from "next/router" // 添加 useRouter
-import Link from "next/link" // 添加 Link 导入
+import { Copy, Check, ChevronLeft, ChevronRight, Clock, ArrowLeft } from "lucide-react"
+import { useRouter } from "next/router"
+import Link from "next/link"
 
 // 假设您将翻译 't' 作为 prop 传递
 interface BlogPostProps {
@@ -228,7 +228,7 @@ export default function BlogPost({ title, date, readingTime, heroImage, children
   }, [children]) // Re-run if children change (e.g., dynamic content)
 
   const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('zh-CN', { // 使用默认中文本地化
+    return new Date(dateString).toLocaleDateString('en-US', {
       year: "numeric",
       month: "long",
       day: "numeric",

@@ -96,7 +96,6 @@ async function main() {
   // 3. 检查翻译文件
   log('info', '检查翻译文件...');
   const localeFiles = [
-    'locales/zh/common.json',
     'locales/en/common.json'
   ];
 

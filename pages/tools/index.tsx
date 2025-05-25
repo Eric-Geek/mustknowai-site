@@ -5,126 +5,96 @@ import { Search, ChevronDown, Brain, Menu } from "lucide-react"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
-import { ToolCard } from "@/components/ToolCard" // 确保 ToolCard 已更新为使用 next/image
+import { ToolCard } from "@/components/ToolCard" // Ensure ToolCard is updated to use next/image
 import { GetStaticProps, InferGetStaticPropsType } from 'next';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import LanguageSwitcher from '@/components/LanguageSwitcher';
 import Link from 'next/link';
-
-async function loadTranslations(locale: string | undefined, defaultLocale: string = 'zh') {
-  const currentLocale = locale || defaultLocale;
-  try {
-    const translations = await import(`@/locales/${currentLocale}/common.json`);
-    return translations.default;
-  } catch {
-    console.warn(`无法加载语言环境 ${currentLocale} 的翻译。正在回退到默认语言 ${defaultLocale}。`);
-    const defaultTranslations = await import(`@/locales/${defaultLocale}/common.json`);
-    return defaultTranslations.default;
-  }
-}
+import { t } from '@/lib/translations';
 
 interface Tool {
-  id: string
-  name: string
-  description: string
-  category: string
-  image?: string // 这将是传递给 ToolCard 的 logo 路径
-  url?: string
-  tags?: string[]
-  featured?: boolean
+  id: string;
+  name: string;
+  description: string;
+  category: string;
+  image: string;
+  url: string;
+  tags?: string[];
 }
 
-// 更新这里的 mockToolsData 以使用您 public 文件夹中的正确图片路径
 const mockToolsData: Tool[] = [
   {
     id: "1",
     name: "ChatGPT",
-    description: "强大的对话式AI助手，可以回答问题、写作、编程等",
-    category: "Writing", // 这些分类名如果也需要翻译，可以在渲染时处理
-    image: "/icons/tools/chatgpt-icon.png", // 更新路径
+    description: "OpenAI's powerful conversational AI",
+    category: "Writing",
+    image: "/icons/tools/chatgpt-icon.png",
     url: "https://chat.openai.com",
-    tags: ["对话", "写作", "编程"],
-    featured: true,
+    tags: ["conversation", "writing", "AI assistant"],
   },
   {
     id: "2",
     name: "Midjourney",
-    description: "顶级的AI图像生成工具，创造惊艳的艺术作品",
+    description: "AI-powered image generation",
     category: "Image",
-    image: "/icons/tools/midjourney-icon.jpg", // 更新路径，注意扩展名
+    image: "/icons/tools/midjourney-icon.jpg",
     url: "https://midjourney.com",
-    tags: ["图像生成", "艺术", "创意"],
+    tags: ["image generation", "art", "creative"],
   },
   {
     id: "3",
     name: "GitHub Copilot",
-    description: "AI编程助手，提供智能代码补全和建议",
+    description: "AI pair programmer",
     category: "Code",
-    image: "/icons/tools/github-copilot-icon.jpg", // 更新路径 (如果重命名了，确保匹配)
+    image: "/icons/tools/github-copilot-icon.jpg",
     url: "https://github.com/features/copilot",
-    tags: ["编程", "代码", "开发"],
+    tags: ["coding", "programming", "development"],
   },
   {
     id: "4",
-    name: "RunwayML", // 如果用作 ToolCard 的 name，实际显示 RunwayML
-    description: "专业的AI视频编辑和生成平台",
-    category: "Video",
-    image: "/icons/tools/runway-icon.jpg", // 更新路径
-    url: "https://runwayml.com",
-    tags: ["视频", "编辑", "生成"],
+    name: "Notion AI",
+    description: "AI-powered productivity and writing assistant",
+    category: "Writing",
+    image: "/icons/tools/notion-icon.jpg",
+    url: "https://notion.so/product/ai",
+    tags: ["productivity", "writing", "organization"],
   },
   {
     id: "5",
-    name: "Notion AI",
-    description: "集成在Notion中的AI写作和思维助手",
-    category: "Writing",
-    image: "/icons/tools/notion-icon.jpg", // 更新路径
-    url: "https://notion.so/product/ai",
-    tags: ["写作", "笔记", "协作"],
+    name: "RunwayML",
+    description: "AI video editing and generation tools",
+    category: "Video",
+    image: "/icons/tools/runway-icon.jpg",
+    url: "https://runwayml.com",
+    tags: ["video editing", "generation", "creative"],
   },
   {
     id: "6",
     name: "Claude AI",
-    description: "OpenAI的最新图像生成模型", // 描述似乎不符，应为 Claude 的描述
-    category: "Image", // 分类也应为 Claude 的分类，例如 Chat 或 Writing
-    image: "/icons/tools/claude-icon.jpg", // 更新路径
-    url: "https://claude.ai", // URL 指向 claude.ai
-    tags: ["图像生成", "OpenAI", "创意"], // 标签也应为 Claude 相关
+    description: "Anthropic's helpful AI assistant",
+    category: "Writing",
+    image: "/icons/tools/claude-icon.jpg",
+    url: "https://claude.ai",
+    tags: ["conversation", "analysis", "writing"],
   },
-  // ...您可以添加更多工具，确保 image 路径正确
 ];
 
-export const getStaticProps: GetStaticProps = async (context) => {
-  const { locale, defaultLocale } = context;
-  const t = await loadTranslations(locale, defaultLocale);
+export const getStaticProps: GetStaticProps = async () => {
   const pageTitle = `${t.toolsDirectoryTitle} - ${t.siteName}`;
   const pageDescription = t.exploreByCategorySubtitle;
 
-  // 在这里，您可以根据 locale 动态获取或过滤工具数据
-  // 为简单起见，我们直接使用上面定义的 mockToolsData
-  // 实际项目中，工具的 name, description, category, tags 都应该国际化
-  const localizedTools = mockToolsData.map(tool => ({
-    ...tool,
-    // name: t[`toolName_${tool.id}`] || tool.name, // 假设翻译文件中有 toolName_1, toolName_2 等
-    // description: t[`toolDesc_${tool.id}`] || tool.description,
-    // category: t[`toolCategory_${tool.category}`] || tool.category, // 如果分类也翻译
-  }));
-
-
   return {
     props: {
-      t,
-      tools: localizedTools,
+      tools: mockToolsData,
       pageTitle,
       pageDescription,
     },
   };
 }
 
-export default function AIToolsDirectory({ t, tools = [], pageTitle, pageDescription }: InferGetStaticPropsType<typeof getStaticProps>) {
+export default function AIToolsDirectory({ tools = [], pageTitle, pageDescription }: InferGetStaticPropsType<typeof getStaticProps>) {
   const router = useRouter();
-  const { locale, query } = router;
+  const { query } = router;
   const initialCategory = typeof query.category === 'string' ? query.category : t.allCategories;
 
   const [selectedCategory, setSelectedCategory] = useState(initialCategory);
@@ -133,21 +103,16 @@ export default function AIToolsDirectory({ t, tools = [], pageTitle, pageDescrip
 
   useEffect(() => {
     const categoryFromQuery = typeof query.category === 'string' ? query.category : t.allCategories;
-    // 如果URL中的category是翻译后的值，您可能需要将其映射回英文键或统一的键
     setSelectedCategory(categoryFromQuery);
-  }, [query.category, t.allCategories]);
+  }, [query.category]);
 
-  // 分类列表本身也应该可以翻译，如果它们是动态生成的或需要在 UI 中显示不同的文本
   const categories = useMemo(() => [
     t.allCategories, "Writing", "Image", "Video", "Code", "Audio", "Business", "Education", "Design"
-    // 更理想的情况是：
-    // t.allCategories, t.categoryWriting, t.categoryImage, ...
-    // 并确保这些键存在于您的 common.json 文件中
-  ], [t]);
+  ], []);
 
   const filteredTools = useMemo(() => {
     return tools.filter((tool) => {
-      const toolCategoryForFilter = tool.category; // 假设 tool.category 存储的是英文键
+      const toolCategoryForFilter = tool.category;
       const matchesCategory = selectedCategory === t.allCategories || toolCategoryForFilter === selectedCategory;
 
       const lowerSearchQuery = searchQuery.toLowerCase();
@@ -158,27 +123,19 @@ export default function AIToolsDirectory({ t, tools = [], pageTitle, pageDescrip
         tool.tags?.some((tag) => tag.toLowerCase().includes(lowerSearchQuery));
       return matchesCategory && matchesSearch;
     });
-  }, [tools, selectedCategory, searchQuery, t.allCategories]);
+  }, [tools, selectedCategory, searchQuery]);
 
   const displayedTools = filteredTools.slice(0, displayCount);
-  const hasMoreTools = displayCount < filteredTools.length;
+  const hasMoreTools = filteredTools.length > displayCount;
 
-  const loadMore = () => {
-    setDisplayCount((prev) => prev + 12);
+  const handleLoadMore = () => {
+    setDisplayCount(prev => prev + 12);
   };
 
-  const getResultsText = () => {
-    const count = filteredTools.length;
-    if (searchQuery && selectedCategory !== t.allCategories) {
-      return t.toolsFoundInCategoryWithQuery.replace('{count}', count.toString()).replace('{category}', selectedCategory).replace('{query}', searchQuery);
-    }
-    if (searchQuery) {
-      return t.toolsFoundWithQuery.replace('{count}', count.toString()).replace('{query}', searchQuery);
-    }
-    if (selectedCategory !== t.allCategories) {
-      return t.toolsFoundInCategory.replace('{count}', count.toString()).replace('{category}', selectedCategory);
-    }
-    return t.toolsFound.replace('{count}', count.toString());
+  const handleResetFilters = () => {
+    setSelectedCategory(t.allCategories);
+    setSearchQuery("");
+    setDisplayCount(12);
   };
 
   return (
@@ -190,32 +147,26 @@ export default function AIToolsDirectory({ t, tools = [], pageTitle, pageDescrip
         <meta property="og:description" content={pageDescription} />
         <meta property="og:url" content={`https://mustknowai.com${router.asPath}`} />
         <meta property="og:site_name" content={t.siteName} />
-        <meta property="og:locale" content={locale} />
-        {router.locales?.filter(l => l !== locale).map(l => (
-          <meta key={l} property="og:locale:alternate" content={l} />
-        ))}
       </Head>
 
       <header className="sticky top-0 z-50 w-full border-b bg-background/80 backdrop-blur-md dark:bg-slate-950/80">
         <div className="container mx-auto flex h-16 items-center justify-between px-4">
-          <Link href="/" locale={locale} className="flex items-center space-x-2">
+          <Link href="/" className="flex items-center space-x-2">
             <Brain className="h-8 w-8 text-blue-600 dark:text-blue-400" />
             <span className="text-xl font-bold text-slate-900 dark:text-white">{t.siteName}</span>
           </Link>
           <nav className="hidden md:flex items-center space-x-6">
-            <Link href="/" locale={locale} className="text-slate-700 hover:text-blue-600 dark:text-slate-300 dark:hover:text-blue-400 transition-colors">
+            <Link href="/" className="text-slate-700 hover:text-blue-600 dark:text-slate-300 dark:hover:text-blue-400 transition-colors">
               {t.navHome}
             </Link>
-            <Link href="/tools" locale={locale} className="text-slate-700 hover:text-blue-600 dark:text-slate-300 dark:hover:text-blue-400 transition-colors font-semibold text-blue-600 dark:text-blue-400">
+            <Link href="/tools" className="text-slate-700 hover:text-blue-600 dark:text-slate-300 dark:hover:text-blue-400 transition-colors font-semibold text-blue-600 dark:text-blue-400">
               {t.navTools}
             </Link>
-            <Link href="/blog" locale={locale} className="text-slate-700 hover:text-blue-600 dark:text-slate-300 dark:hover:text-blue-400 transition-colors">
+            <Link href="/blog" className="text-slate-700 hover:text-blue-600 dark:text-slate-300 dark:hover:text-blue-400 transition-colors">
               {t.navBlog}
             </Link>
-            <LanguageSwitcher />
           </nav>
           <div className="md:hidden flex items-center">
-            <LanguageSwitcher />
             <Button variant="ghost" size="icon" aria-label="Toggle menu">
               <Menu className="h-5 w-5" />
             </Button>
@@ -230,12 +181,12 @@ export default function AIToolsDirectory({ t, tools = [], pageTitle, pageDescrip
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button variant="outline" className="w-full sm:w-auto justify-between">
-                  {selectedCategory} {/* 如果分类名已翻译，这里会显示翻译后的 */}
+                  {selectedCategory}
                   <ChevronDown className="ml-2 h-4 w-4" />
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="start" className="w-48">
-                {categories.map((categoryValue) => ( // categoryValue 可能是翻译后的值或键
+                {categories.map((categoryValue) => (
                   <DropdownMenuItem
                     key={categoryValue}
                     onClick={() => setSelectedCategory(categoryValue)}
@@ -260,53 +211,52 @@ export default function AIToolsDirectory({ t, tools = [], pageTitle, pageDescrip
         </div>
       </div>
 
-      <div className="container mx-auto px-4 py-8">
-        <div className="mb-6">
-          <p className="text-muted-foreground">
-            {getResultsText()}
-          </p>
-        </div>
-
-        {displayedTools.length > 0 ? (
+      <main className="container mx-auto px-4 py-8">
+        {filteredTools.length === 0 ? (
+          <div className="text-center py-16">
+            <h2 className="text-2xl font-bold text-foreground mb-4">{t.noToolsFoundTitle}</h2>
+            <p className="text-muted-foreground mb-6">{t.noToolsFoundSubtitle}</p>
+            <Button onClick={handleResetFilters} variant="outline">
+              {t.resetFiltersButton}
+            </Button>
+          </div>
+        ) : (
           <>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+            <div className="mb-6">
+              <p className="text-muted-foreground">
+                {searchQuery && selectedCategory !== t.allCategories
+                  ? `Found ${filteredTools.length} tools containing '${searchQuery}' in ${selectedCategory} category`
+                  : searchQuery
+                  ? `Found ${filteredTools.length} tools containing '${searchQuery}'`
+                  : selectedCategory !== t.allCategories
+                  ? `Found ${filteredTools.length} tools in ${selectedCategory} category`
+                  : `Found ${filteredTools.length} tools`}
+              </p>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
               {displayedTools.map((tool) => (
-                <div key={tool.id} className="h-fit">
-                  <ToolCard
-                    logo={tool.image || "/placeholder.svg"} // ToolCard 现在使用 next/image
-                    name={tool.name} // 如果工具名称已在 getStaticProps 中本地化，则这里是本地化后的名称
-                    tagline={tool.description} // 同上
-                    category={tool.category} // 同上
-                    url={tool.url}
-                  />
-                </div>
+                <ToolCard 
+                  key={tool.id} 
+                  logo={tool.image}
+                  name={tool.name}
+                  tagline={tool.description}
+                  category={tool.category}
+                  url={tool.url}
+                />
               ))}
             </div>
+            
             {hasMoreTools && (
-              <div className="flex justify-center">
-                <Button onClick={loadMore} variant="outline" size="lg" className="px-8">
+              <div className="text-center mt-12">
+                <Button onClick={handleLoadMore} variant="outline" size="lg">
                   {t.loadMoreButton}
                 </Button>
               </div>
             )}
           </>
-        ) : (
-          <div className="text-center py-16">
-            <div className="text-6xl mb-4" aria-hidden="true">🔍</div>
-            <h3 className="text-xl font-semibold mb-2">{t.noToolsFoundTitle}</h3>
-            <p className="text-muted-foreground mb-4">{t.noToolsFoundSubtitle}</p>
-            <Button
-              variant="outline"
-              onClick={() => {
-                setSearchQuery("");
-                setSelectedCategory(t.allCategories);
-              }}
-            >
-              {t.resetFiltersButton}
-            </Button>
-          </div>
         )}
-      </div>
+      </main>
     </div>
-  );
+  )
 }

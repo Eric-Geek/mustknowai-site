@@ -14,13 +14,9 @@ interface ToolCardProps {
   category: string
   url: string
   variant?: "standard" | "compact"
-  // 如果工具名称和标语需要翻译，从页面级别传递翻译后的文本
-  // translatedName?: string;
-  // translatedTagline?: string;
-  // translatedCategory?: string;
 }
 
-// 使用 memo 优化组件，避免不必要的重新渲染
+// Use memo to optimize component and avoid unnecessary re-renders
 export const ToolCard = memo(function ToolCard({ 
   logo, 
   name, 
@@ -59,7 +55,7 @@ export const ToolCard = memo(function ToolCard({
                   onError={handleImageError}
                 />
               ) : (
-                // 图片加载失败时的备用显示
+                // Fallback display when image fails to load
                 <div className="h-full w-full flex items-center justify-center text-xl font-bold bg-muted-foreground/10 text-muted-foreground">
                   {name.charAt(0).toUpperCase()}
                 </div>
@@ -87,8 +83,7 @@ export const ToolCard = memo(function ToolCard({
           asChild
         >
           <a href={url} target="_blank" rel="noopener noreferrer">
-            {/* 这里的文本也应该来自翻译文件，例如 t.tryTool.replace('{toolName}', name) */}
-            <span>尝试 {name}</span>
+            <span>Try {name}</span>
             <ExternalLink className="ml-2 h-3 w-3" />
           </a>
         </Button>
@@ -96,54 +91,3 @@ export const ToolCard = memo(function ToolCard({
     </Card>
   )
 });
-
-// 优化示例组件
-export default function ToolCardExample() {
-  const tools = [
-    {
-      logo: "/icons/tools/chatgpt-icon.png",
-      name: "ChatGPT",
-      tagline: "对话式AI，可帮助完成写作、分析和创意任务",
-      category: "聊天",
-      url: "https://chat.openai.com",
-    },
-    {
-      logo: "/icons/tools/midjourney-icon.jpg",
-      name: "Midjourney",
-      tagline: "为创意专业人士提供AI驱动的图像生成",
-      category: "图像",
-      url: "https://midjourney.com",
-    },
-  ];
-
-  return (
-    <div className="p-8 bg-background min-h-screen">
-      <div className="max-w-6xl mx-auto">
-        <h1 className="text-3xl font-bold mb-2">AI 工具卡片</h1>
-        <p className="text-muted-foreground mb-8">
-          可重用组件，展示具有标准和紧凑型变体的不同AI工具。
-        </p>
-
-        <div className="space-y-8">
-          <div>
-            <h2 className="text-xl font-semibold mb-4">标准样式</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-              {tools.map((tool, index) => (
-                <ToolCard key={index} {...tool} variant="standard" />
-              ))}
-            </div>
-          </div>
-
-          <div>
-            <h2 className="text-xl font-semibold mb-4">紧凑样式</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-              {tools.map((tool, index) => (
-                <ToolCard key={index} {...tool} variant="compact" />
-              ))}
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  )
-}

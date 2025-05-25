@@ -27,12 +27,6 @@ const nextConfig = {
     config.resolve.alias['@'] = resolve(__dirname);
     return config;
   },
-  // Pages Router 专用 i18n 配置
-  i18n: {
-    locales: ['zh', 'en'],
-    defaultLocale: 'zh',
-    localeDetection: false, // 修复警告，设为 false
-  },
   // 添加重定向规则修复博客跳转问题
   async redirects() {
     return [

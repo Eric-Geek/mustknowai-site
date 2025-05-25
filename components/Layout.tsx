@@ -13,23 +13,16 @@ const fontSans = FontSans({
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   const router = useRouter();
-  const { locale, asPath } = router;
-  const siteBaseUrl = "https://mustknowai.com"; // 您的网站基础URL
+  const { asPath } = router;
+  const siteBaseUrl = "https://mustknowai.com";
 
-  // 生成规范URL和hreflang URLs
-  const canonicalUrl = `${siteBaseUrl}${locale === router.defaultLocale ? '' : `/${locale}`}${asPath === '/' && locale !== router.defaultLocale ? '' : asPath.split('?')[0]}`;
-  const zhUrl = `${siteBaseUrl}/zh${asPath.split('?')[0]}`;
-  const enUrl = `${siteBaseUrl}/en${asPath.split('?')[0]}`;
-
+  const canonicalUrl = `${siteBaseUrl}${asPath.split('?')[0]}`;
 
   return (
-    <html lang={locale || 'zh'} suppressHydrationWarning>
+    <html lang="en" suppressHydrationWarning>
       <Head>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="canonical" href={canonicalUrl} />
-        <link rel="alternate" hrefLang="zh" href={zhUrl} />
-        <link rel="alternate" hrefLang="en" href={enUrl} />
-        <link rel="alternate" hrefLang="x-default" href={`${siteBaseUrl}/${router.defaultLocale}${asPath.split('?')[0]}`} />
       </Head>
       <body
         className={cn(
