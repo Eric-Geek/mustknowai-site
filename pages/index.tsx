@@ -1,6 +1,5 @@
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
 import { Badge } from "@/components/ui/badge"
 import Head from 'next/head';
 import Image from 'next/image'; // Import Next.js Image component
@@ -23,6 +22,7 @@ import Link from 'next/link';
 import { useMemo, useCallback } from 'react';
 import { t } from '@/lib/translations';
 import { ToolCard } from "@/components/ToolCard";
+import StatsSection from "@/components/StatsSection";
 
 export const getStaticProps: GetStaticProps = async () => {
   const title = `${t.siteName} - ${t.heroTitle.split('—')[1]?.trim() || 'AI Tools & Insights'}`;
@@ -241,8 +241,9 @@ export default function LandingPage({ title, description }: InferGetStaticPropsT
                 variant="outline" 
                 size="lg" 
                 className="border-2 border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-white dark:hover:bg-gray-800 hover:border-blue-500 dark:hover:border-blue-400 px-8 py-4 text-lg font-semibold backdrop-blur-sm transition-all duration-300"
+                onClick={() => router.push('/blog')}
               >
-                {t.subscribeButton}
+                Learn More
               </Button>
             </div>
 
@@ -292,6 +293,9 @@ export default function LandingPage({ title, description }: InferGetStaticPropsT
           </div>
         </div>
       </section>
+
+      {/* Stats Section */}
+      <StatsSection />
 
       {/* Categories Section */}
       <section className="py-20">
@@ -393,28 +397,6 @@ export default function LandingPage({ title, description }: InferGetStaticPropsT
                 </Link>
               </Card>
             ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Newsletter Section */}
-      <section className="py-20">
-        <div className="container mx-auto px-4">
-          <div className="max-w-2xl mx-auto text-center">
-            <h2 className="text-3xl lg:text-4xl font-bold text-slate-900 dark:text-white mb-4">{t.newsletterTitle}</h2>
-            <p className="text-xl text-slate-600 dark:text-slate-300 mb-8">
-              {t.newsletterSubtitle}
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 max-w-md mx-auto">
-              <Input 
-                type="email" 
-                placeholder={t.newsletterPlaceholder}
-                className="flex-1"
-              />
-              <Button className="bg-blue-600 hover:bg-blue-700 text-white">
-                {t.subscribeButton}
-              </Button>
-            </div>
           </div>
         </div>
       </section>

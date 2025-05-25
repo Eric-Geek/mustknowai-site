@@ -1,11 +1,10 @@
 "use client"
 
 import { useState, useMemo, useEffect } from "react"
-import { Search, ChevronDown, Brain, Menu } from "lucide-react"
-import { Input } from "@/components/ui/input"
+import { Brain, Menu } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
-import { ToolCard } from "@/components/ToolCard" // Ensure ToolCard is updated to use next/image
+import { ToolCard } from "@/components/ToolCard"
+import AdvancedSearch from "@/components/AdvancedSearch"
 import { GetStaticProps, InferGetStaticPropsType } from 'next';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
@@ -19,7 +18,7 @@ interface Tool {
   category: string;
   image: string;
   url: string;
-  tags?: string[];
+  tags: string[];
   featured: boolean;
   rating: number;
 }
@@ -32,7 +31,7 @@ const mockToolsData: Tool[] = [
     category: "Writing",
     image: "/icons/tools/chatgpt-icon.png",
     url: "https://chat.openai.com",
-    tags: ["conversation", "writing", "AI assistant"],
+    tags: ["conversation", "writing", "AI assistant", "coding", "analysis"],
     featured: true,
     rating: 4.8
   },
@@ -43,7 +42,7 @@ const mockToolsData: Tool[] = [
     category: "Image",
     image: "/icons/tools/midjourney-icon.jpg",
     url: "https://midjourney.com",
-    tags: ["image generation", "art", "creative"],
+    tags: ["image generation", "art", "creative", "design", "visual"],
     featured: true,
     rating: 4.7
   },
@@ -54,7 +53,7 @@ const mockToolsData: Tool[] = [
     category: "Code",
     image: "/icons/tools/github-copilot-icon.jpg",
     url: "https://github.com/features/copilot",
-    tags: ["coding", "programming", "development"],
+    tags: ["coding", "programming", "development", "autocomplete", "IDE"],
     featured: false,
     rating: 4.6
   },
@@ -65,7 +64,7 @@ const mockToolsData: Tool[] = [
     category: "Writing",
     image: "/icons/tools/notion-icon.jpg",
     url: "https://notion.so/product/ai",
-    tags: ["productivity", "writing", "organization"],
+    tags: ["productivity", "writing", "organization", "notes", "workspace"],
     featured: false,
     rating: 4.4
   },
@@ -76,7 +75,7 @@ const mockToolsData: Tool[] = [
     category: "Video",
     image: "/icons/tools/runway-icon.jpg",
     url: "https://runwayml.com",
-    tags: ["video editing", "generation", "creative"],
+    tags: ["video editing", "generation", "creative", "media", "production"],
     featured: false,
     rating: 4.3
   },
@@ -87,7 +86,7 @@ const mockToolsData: Tool[] = [
     category: "Writing",
     image: "/icons/tools/claude-icon.jpg",
     url: "https://claude.ai",
-    tags: ["conversation", "analysis", "writing"],
+    tags: ["conversation", "analysis", "writing", "reasoning", "research"],
     featured: false,
     rating: 4.5
   },
@@ -98,7 +97,7 @@ const mockToolsData: Tool[] = [
     category: "Image",
     image: "/placeholder.svg?height=64&width=64&text=SD",
     url: "https://stability.ai/stable-diffusion",
-    tags: ["image generation", "open source", "text-to-image"],
+    tags: ["image generation", "open source", "text-to-image", "AI model", "free"],
     featured: false,
     rating: 4.2
   },
@@ -109,9 +108,31 @@ const mockToolsData: Tool[] = [
     category: "Code",
     image: "/placeholder.svg?height=64&width=64&text=CR",
     url: "https://cursor.sh",
-    tags: ["code editor", "AI assistant", "development"],
+    tags: ["code editor", "AI assistant", "development", "collaboration", "IDE"],
     featured: false,
     rating: 4.4
+  },
+  {
+    id: "9",
+    name: "Perplexity AI",
+    description: "AI-powered search engine that provides accurate, real-time answers",
+    category: "Research",
+    image: "/placeholder.svg?height=64&width=64&text=PX",
+    url: "https://perplexity.ai",
+    tags: ["search", "research", "AI search", "answers", "real-time"],
+    featured: false,
+    rating: 4.3
+  },
+  {
+    id: "10",
+    name: "Luma AI",
+    description: "Create stunning 3D content and videos with AI technology",
+    category: "Video",
+    image: "/placeholder.svg?height=64&width=64&text=LM",
+    url: "https://lumalabs.ai",
+    tags: ["3D", "video generation", "AI video", "content creation", "visual effects"],
+    featured: false,
+    rating: 4.1
   }
 ];
 
@@ -131,51 +152,98 @@ export const getStaticProps: GetStaticProps = async () => {
 export default function AIToolsDirectory({ tools = [], pageTitle, pageDescription }: InferGetStaticPropsType<typeof getStaticProps>) {
   const router = useRouter();
   const { query } = router;
-  const initialCategory = typeof query.category === 'string' ? query.category : t.allCategories;
+  const initialCategory = typeof query.category === 'string' ? query.category : "All Categories";
 
   const [selectedCategory, setSelectedCategory] = useState(initialCategory);
   const [searchQuery, setSearchQuery] = useState("");
+  const [selectedTags, setSelectedTags] = useState<string[]>([]);
+  const [sortBy, setSortBy] = useState("relevance");
   const [displayCount, setDisplayCount] = useState(12);
 
   useEffect(() => {
-    const categoryFromQuery = typeof query.category === 'string' ? query.category : t.allCategories;
+    const categoryFromQuery = typeof query.category === 'string' ? query.category : "All Categories";
     setSelectedCategory(categoryFromQuery);
   }, [query.category]);
 
   const categories = useMemo(() => [
-    t.allCategories, "Writing", "Image", "Video", "Code", "Audio", "Business", "Education", "Design"
+    "All Categories", "Writing", "Image", "Video", "Code", "Research", "Audio", "Business", "Education", "Design"
   ], []);
 
-  const filteredTools = useMemo(() => {
-    return tools.filter((tool) => {
-      const toolCategoryForFilter = tool.category;
-      const matchesCategory = selectedCategory === t.allCategories || toolCategoryForFilter === selectedCategory;
+  // Extract all unique tags from tools
+  const availableTags = useMemo(() => {
+    const typedTools = tools as Tool[];
+    const allTags = typedTools.flatMap(tool => tool.tags || []);
+    return Array.from(new Set(allTags)).sort();
+  }, [tools]);
 
+  const filteredAndSortedTools = useMemo(() => {
+    const typedTools = tools as Tool[];
+    let filtered = typedTools.filter((tool) => {
+      const matchesCategory = selectedCategory === "All Categories" || tool.category === selectedCategory;
+      
       const lowerSearchQuery = searchQuery.toLowerCase();
-      const matchesSearch =
-        searchQuery === "" ||
+      const matchesSearch = searchQuery === "" ||
         tool.name.toLowerCase().includes(lowerSearchQuery) ||
         tool.description.toLowerCase().includes(lowerSearchQuery) ||
-        tool.tags?.some((tag) => tag.toLowerCase().includes(lowerSearchQuery));
-      return matchesCategory && matchesSearch;
+        tool.tags.some(tag => tag.toLowerCase().includes(lowerSearchQuery));
+      
+      const matchesTags = selectedTags.length === 0 || 
+        selectedTags.some(tag => tool.tags.includes(tag));
+      
+      return matchesCategory && matchesSearch && matchesTags;
     });
-  }, [tools, selectedCategory, searchQuery]);
 
-  const displayedTools = filteredTools.slice(0, displayCount);
-  const hasMoreTools = filteredTools.length > displayCount;
+    // Sort the filtered results
+    switch (sortBy) {
+      case "rating":
+        filtered.sort((a, b) => b.rating - a.rating);
+        break;
+      case "newest":
+        // For demo purposes, sort by ID (assuming higher ID = newer)
+        filtered.sort((a, b) => parseInt(b.id) - parseInt(a.id));
+        break;
+      case "popular":
+        // Sort by featured first, then by rating
+        filtered.sort((a, b) => {
+          if (a.featured && !b.featured) return -1;
+          if (!a.featured && b.featured) return 1;
+          return b.rating - a.rating;
+        });
+        break;
+      default: // relevance
+        // Sort by featured first, then by search relevance
+        filtered.sort((a, b) => {
+          if (a.featured && !b.featured) return -1;
+          if (!a.featured && b.featured) return 1;
+          
+          if (searchQuery) {
+            const aRelevance = (
+              (a.name.toLowerCase().includes(searchQuery.toLowerCase()) ? 2 : 0) +
+              (a.description.toLowerCase().includes(searchQuery.toLowerCase()) ? 1 : 0)
+            );
+            const bRelevance = (
+              (b.name.toLowerCase().includes(searchQuery.toLowerCase()) ? 2 : 0) +
+              (b.description.toLowerCase().includes(searchQuery.toLowerCase()) ? 1 : 0)
+            );
+            return bRelevance - aRelevance;
+          }
+          
+          return b.rating - a.rating;
+        });
+    }
+
+    return filtered;
+  }, [tools, selectedCategory, searchQuery, selectedTags, sortBy]);
+
+  const displayedTools = filteredAndSortedTools.slice(0, displayCount);
+  const hasMoreTools = filteredAndSortedTools.length > displayCount;
 
   const handleLoadMore = () => {
     setDisplayCount(prev => prev + 12);
   };
 
-  const handleResetFilters = () => {
-    setSelectedCategory(t.allCategories);
-    setSearchQuery("");
-    setDisplayCount(12);
-  };
-
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-blue-50 dark:from-slate-950 dark:via-slate-900 dark:to-blue-950">
       <Head>
         <title>{pageTitle}</title>
         <meta name="description" content={pageDescription} />
@@ -185,7 +253,7 @@ export default function AIToolsDirectory({ tools = [], pageTitle, pageDescriptio
         <meta property="og:site_name" content={t.siteName} />
       </Head>
 
-      <header className="sticky top-0 z-50 w-full border-b bg-background/80 backdrop-blur-md dark:bg-slate-950/80">
+      <header className="sticky top-0 z-50 w-full border-b border-white/20 bg-white/80 backdrop-blur-md dark:bg-slate-950/80">
         <div className="container mx-auto flex h-16 items-center justify-between px-4">
           <Link href="/" className="flex items-center space-x-2">
             <Brain className="h-8 w-8 text-blue-600 dark:text-blue-400" />
@@ -210,67 +278,42 @@ export default function AIToolsDirectory({ tools = [], pageTitle, pageDescriptio
         </div>
       </header>
 
-      <div className="sticky top-16 z-40 bg-background/80 backdrop-blur-md border-b">
-        <div className="container mx-auto px-4 py-6">
-          <h1 className="text-3xl font-bold text-foreground mb-6">{t.toolsDirectoryTitle}</h1>
-          <div className="flex flex-col sm:flex-row gap-4">
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="outline" className="w-full sm:w-auto justify-between">
-                  {selectedCategory}
-                  <ChevronDown className="ml-2 h-4 w-4" />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="start" className="w-48">
-                {categories.map((categoryValue) => (
-                  <DropdownMenuItem
-                    key={categoryValue}
-                    onClick={() => setSelectedCategory(categoryValue)}
-                    className={selectedCategory === categoryValue ? "bg-accent" : ""}
-                  >
-                    {categoryValue}
-                  </DropdownMenuItem>
-                ))}
-              </DropdownMenuContent>
-            </DropdownMenu>
-            <div className="relative flex-1 max-w-md">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
-              <Input
-                placeholder={t.searchPlaceholder}
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-10"
-                aria-label={t.searchPlaceholder}
-              />
-            </div>
-          </div>
-        </div>
-      </div>
-
       <main className="container mx-auto px-4 py-8">
-        {filteredTools.length === 0 ? (
+        {/* Page Header */}
+        <div className="text-center mb-12">
+          <h1 className="text-4xl lg:text-5xl font-bold text-slate-900 dark:text-white mb-4">
+            {t.toolsDirectoryTitle}
+          </h1>
+          <p className="text-xl text-slate-600 dark:text-slate-300 max-w-3xl mx-auto">
+            Discover the perfect AI tools for your needs. Filter by category, search by features, and find exactly what you're looking for.
+          </p>
+        </div>
+
+        {/* Advanced Search Component */}
+        <AdvancedSearch
+          searchQuery={searchQuery}
+          onSearchChange={setSearchQuery}
+          selectedCategory={selectedCategory}
+          onCategoryChange={setSelectedCategory}
+          selectedTags={selectedTags}
+          onTagsChange={setSelectedTags}
+          categories={categories}
+          availableTags={availableTags}
+          sortBy={sortBy}
+          onSortChange={setSortBy}
+          resultsCount={filteredAndSortedTools.length}
+        />
+
+        {/* Tools Grid */}
+        {filteredAndSortedTools.length === 0 ? (
           <div className="text-center py-16">
+            <div className="text-6xl mb-4" aria-hidden="true">🔍</div>
             <h2 className="text-2xl font-bold text-foreground mb-4">{t.noToolsFoundTitle}</h2>
             <p className="text-muted-foreground mb-6">{t.noToolsFoundSubtitle}</p>
-            <Button onClick={handleResetFilters} variant="outline">
-              {t.resetFiltersButton}
-            </Button>
           </div>
         ) : (
           <>
-            <div className="mb-6">
-              <p className="text-muted-foreground">
-                {searchQuery && selectedCategory !== t.allCategories
-                  ? `Found ${filteredTools.length} tools containing '${searchQuery}' in ${selectedCategory} category`
-                  : searchQuery
-                  ? `Found ${filteredTools.length} tools containing '${searchQuery}'`
-                  : selectedCategory !== t.allCategories
-                  ? `Found ${filteredTools.length} tools in ${selectedCategory} category`
-                  : `Found ${filteredTools.length} tools`}
-              </p>
-            </div>
-            
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-8">
               {displayedTools.map((tool) => (
                 <ToolCard 
                   key={tool.id} 
@@ -286,8 +329,13 @@ export default function AIToolsDirectory({ tools = [], pageTitle, pageDescriptio
             </div>
             
             {hasMoreTools && (
-              <div className="text-center mt-12">
-                <Button onClick={handleLoadMore} variant="outline" size="lg">
+              <div className="text-center">
+                <Button 
+                  onClick={handleLoadMore} 
+                  variant="outline" 
+                  size="lg"
+                  className="px-8 py-3 text-lg border-2 border-blue-500 text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-950"
+                >
                   {t.loadMoreButton}
                 </Button>
               </div>
