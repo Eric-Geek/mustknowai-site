@@ -22,6 +22,7 @@ import { useRouter } from 'next/router';
 import Link from 'next/link';
 import { useMemo, useCallback } from 'react';
 import { t } from '@/lib/translations';
+import { ToolCard } from "@/components/ToolCard";
 
 export const getStaticProps: GetStaticProps = async () => {
   const title = `${t.siteName} - ${t.heroTitle.split('—')[1]?.trim() || 'AI Tools & Insights'}`;
@@ -70,21 +71,51 @@ export default function LandingPage({ title, description }: InferGetStaticPropsT
   const featuredTools = useMemo(() => [
     {
       name: "ChatGPT",
-      description: "OpenAI's powerful conversational AI",
+      description: "OpenAI's powerful conversational AI for writing, coding, and analysis",
       image: "/icons/tools/chatgpt-icon.png",
-      url: "https://chat.openai.com"
+      url: "https://chat.openai.com",
+      featured: true,
+      rating: 4.8
     },
     {
       name: "Midjourney",
-      description: "AI-powered image generation",
+      description: "Create stunning AI-generated artwork and images with simple prompts",
       image: "/icons/tools/midjourney-icon.jpg",
-      url: "https://midjourney.com"
+      url: "https://midjourney.com",
+      featured: true,
+      rating: 4.7
     },
     {
       name: "GitHub Copilot",
-      description: "AI pair programmer",
+      description: "AI pair programmer that helps you write code faster and smarter",
       image: "/icons/tools/github-copilot-icon.jpg",
-      url: "https://github.com/features/copilot"
+      url: "https://github.com/features/copilot",
+      featured: false,
+      rating: 4.6
+    },
+    {
+      name: "Claude AI",
+      description: "Anthropic's helpful AI assistant for analysis, writing, and reasoning",
+      image: "/icons/tools/claude-icon.jpg",
+      url: "https://claude.ai",
+      featured: false,
+      rating: 4.5
+    },
+    {
+      name: "Notion AI",
+      description: "AI-powered productivity assistant integrated into your workspace",
+      image: "/icons/tools/notion-icon.jpg",
+      url: "https://notion.so/product/ai",
+      featured: false,
+      rating: 4.4
+    },
+    {
+      name: "RunwayML",
+      description: "Professional AI video editing and generation platform",
+      image: "/icons/tools/runway-icon.jpg",
+      url: "https://runwayml.com",
+      featured: false,
+      rating: 4.3
     }
   ], []);
 
@@ -164,31 +195,71 @@ export default function LandingPage({ title, description }: InferGetStaticPropsT
       </header>
 
       {/* Hero Section */}
-      <section className="py-20 lg:py-32">
-        <div className="container mx-auto px-4 text-center">
-          <div className="mx-auto max-w-4xl">
-            <h1 className="text-4xl lg:text-6xl font-bold text-slate-900 dark:text-white mb-6">
-              {t.heroTitle}
+      <section className="relative py-20 lg:py-32 overflow-hidden">
+        {/* Background gradient */}
+        <div className="absolute inset-0 bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 dark:from-blue-950/20 dark:via-indigo-950/20 dark:to-purple-950/20" />
+        
+        {/* Animated background elements */}
+        <div className="absolute inset-0 overflow-hidden">
+          <div className="absolute -top-40 -right-40 w-80 h-80 bg-gradient-to-br from-blue-400/20 to-purple-400/20 rounded-full blur-3xl animate-pulse" />
+          <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-gradient-to-br from-purple-400/20 to-pink-400/20 rounded-full blur-3xl animate-pulse delay-1000" />
+        </div>
+
+        <div className="container mx-auto px-4 text-center relative z-10">
+          <div className="mx-auto max-w-5xl">
+            {/* Badge */}
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm border border-gray-200/50 dark:border-gray-700/50 shadow-lg mb-8">
+              <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
+              <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                Discover 100+ AI Tools
+              </span>
+            </div>
+
+            <h1 className="text-4xl md:text-5xl lg:text-7xl font-bold text-slate-900 dark:text-white mb-6 leading-tight">
+              <span className="bg-gradient-to-r from-blue-600 via-purple-600 to-blue-600 bg-clip-text text-transparent bg-size-200 animate-gradient">
+                Discover the Best
+              </span>
+              <br />
+              <span className="text-slate-900 dark:text-white">AI Tools</span>
             </h1>
-            <p className="text-xl text-slate-600 dark:text-slate-300 mb-8 max-w-2xl mx-auto">
-              {t.heroSubtitle}
+            
+            <p className="text-xl md:text-2xl text-slate-600 dark:text-slate-300 mb-12 max-w-3xl mx-auto leading-relaxed">
+              Curated collection of AI tools to empower your work, learning, and creative projects
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            
+            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
               <Button 
                 size="lg" 
-                className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 text-lg"
+                className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-8 py-4 text-lg font-semibold shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-105 border-0"
                 onClick={handleExploreTools}
               >
                 {t.exploreToolsButton}
-                <ArrowRight className="ml-2 h-5 w-5" />
+                <ArrowRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
               </Button>
+              
               <Button 
                 variant="outline" 
                 size="lg" 
-                className="border-blue-600 text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-950 px-8 py-3 text-lg"
+                className="border-2 border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-white dark:hover:bg-gray-800 hover:border-blue-500 dark:hover:border-blue-400 px-8 py-4 text-lg font-semibold backdrop-blur-sm transition-all duration-300"
               >
                 {t.subscribeButton}
               </Button>
+            </div>
+
+            {/* Stats */}
+            <div className="flex flex-wrap justify-center gap-8 mt-16 pt-8 border-t border-gray-200/50 dark:border-gray-700/50">
+              <div className="text-center">
+                <div className="text-3xl font-bold text-blue-600 dark:text-blue-400">100+</div>
+                <div className="text-sm text-gray-600 dark:text-gray-400">AI Tools</div>
+              </div>
+              <div className="text-center">
+                <div className="text-3xl font-bold text-purple-600 dark:text-purple-400">50K+</div>
+                <div className="text-sm text-gray-600 dark:text-gray-400">Users</div>
+              </div>
+              <div className="text-center">
+                <div className="text-3xl font-bold text-green-600 dark:text-green-400">4.8</div>
+                <div className="text-sm text-gray-600 dark:text-gray-400">Rating</div>
+              </div>
             </div>
           </div>
         </div>
@@ -203,37 +274,20 @@ export default function LandingPage({ title, description }: InferGetStaticPropsT
               {t.featuredToolsSubtitle}
             </p>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
             {featuredTools.map((tool, index) => (
-              <Card 
-                key={index} 
-                className="group hover:shadow-xl transition-all duration-300 overflow-hidden bg-white/80 backdrop-blur-sm dark:bg-slate-800/80 border-white/20"
-              >
-                <CardContent className="p-6">
-                  <div className="flex items-center space-x-4 mb-4">
-                    <div className="w-12 h-12 rounded-lg overflow-hidden bg-white shadow-sm">
-                      <Image
-                        src={tool.image}
-                        alt={tool.name}
-                        width={48}
-                        height={48}
-                        className="object-cover"
-                      />
-                    </div>
-                    <div>
-                      <h3 className="text-lg font-semibold text-slate-900 dark:text-white">{tool.name}</h3>
-                    </div>
-                  </div>
-                  <p className="text-slate-600 dark:text-slate-300 mb-4">{tool.description}</p>
-                  <Button 
-                    variant="outline" 
-                    className="w-full group-hover:bg-blue-600 group-hover:text-white group-hover:border-blue-600 transition-all duration-300"
-                    onClick={() => window.open(tool.url, '_blank')}
-                  >
-                    {t.tryNowButton}
-                  </Button>
-                </CardContent>
-              </Card>
+              <div key={index} className="h-fit">
+                <ToolCard
+                  logo={tool.image}
+                  name={tool.name}
+                  tagline={tool.description}
+                  category="AI Tool"
+                  url={tool.url}
+                  featured={tool.featured}
+                  rating={tool.rating}
+                  variant="standard"
+                />
+              </div>
             ))}
           </div>
         </div>
@@ -248,27 +302,43 @@ export default function LandingPage({ title, description }: InferGetStaticPropsT
               {t.exploreByCategorySubtitle}
             </p>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto">
             {categories.map((category, index) => (
               <Card 
                 key={index} 
-                className="group hover:shadow-xl transition-all duration-300 cursor-pointer overflow-hidden bg-white/80 backdrop-blur-sm dark:bg-slate-800/80 border-white/20"
+                className="group relative overflow-hidden cursor-pointer transition-all duration-500 hover:shadow-2xl hover:shadow-blue-500/10 hover:-translate-y-2 hover:scale-105 bg-gradient-to-br from-white to-gray-50/50 dark:from-gray-900 dark:to-gray-800/50 border-0 rounded-2xl"
                 onClick={() => handleCategoryClick(category.query)}
               >
-                <CardContent className="p-6 text-center">
-                  <div className="w-16 h-16 mx-auto mb-4 rounded-lg overflow-hidden bg-blue-50 dark:bg-blue-950 flex items-center justify-center">
-                    <Image
-                      src={category.icon}
-                      alt={category.name}
-                      width={32}
-                      height={32}
-                      className="object-cover"
-                    />
+                {/* Gradient overlay */}
+                <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 to-purple-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-2xl" />
+                
+                <CardContent className="p-8 text-center relative z-10">
+                  <div className="relative mb-6">
+                    <div className="w-20 h-20 mx-auto rounded-2xl overflow-hidden bg-gradient-to-br from-blue-50 to-purple-50 dark:from-blue-950/50 dark:to-purple-950/50 flex items-center justify-center shadow-lg ring-1 ring-gray-200/50 dark:ring-gray-700/50 group-hover:scale-110 transition-transform duration-300">
+                      <Image
+                        src={category.icon}
+                        alt={category.name}
+                        width={40}
+                        height={40}
+                        className="object-contain transition-transform duration-300 group-hover:scale-110"
+                      />
+                    </div>
+                    
+                    {/* Floating badge */}
+                    <div className="absolute -top-2 -right-2 w-6 h-6 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center shadow-lg opacity-0 group-hover:opacity-100 transition-all duration-300 transform scale-0 group-hover:scale-100">
+                      <ArrowRight className="w-3 h-3 text-white" />
+                    </div>
                   </div>
-                  <h3 className="text-lg font-semibold text-slate-900 dark:text-white mb-2 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+                  
+                  <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-3 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors duration-300">
                     {category.name}
                   </h3>
-                  <p className="text-slate-600 dark:text-slate-300 text-sm">{category.description}</p>
+                  <p className="text-slate-600 dark:text-slate-300 text-sm leading-relaxed">
+                    {category.description}
+                  </p>
+                  
+                  {/* Bottom accent line */}
+                  <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-blue-500 to-purple-500 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 rounded-b-2xl" />
                 </CardContent>
               </Card>
             ))}

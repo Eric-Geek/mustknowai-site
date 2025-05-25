@@ -20,63 +20,99 @@ interface Tool {
   image: string;
   url: string;
   tags?: string[];
+  featured: boolean;
+  rating: number;
 }
 
 const mockToolsData: Tool[] = [
   {
     id: "1",
     name: "ChatGPT",
-    description: "OpenAI's powerful conversational AI",
+    description: "OpenAI's powerful conversational AI for writing, coding, and analysis",
     category: "Writing",
     image: "/icons/tools/chatgpt-icon.png",
     url: "https://chat.openai.com",
     tags: ["conversation", "writing", "AI assistant"],
+    featured: true,
+    rating: 4.8
   },
   {
     id: "2",
     name: "Midjourney",
-    description: "AI-powered image generation",
+    description: "Create stunning AI-generated artwork and images with simple prompts",
     category: "Image",
     image: "/icons/tools/midjourney-icon.jpg",
     url: "https://midjourney.com",
     tags: ["image generation", "art", "creative"],
+    featured: true,
+    rating: 4.7
   },
   {
     id: "3",
     name: "GitHub Copilot",
-    description: "AI pair programmer",
+    description: "AI pair programmer that helps you write code faster and smarter",
     category: "Code",
     image: "/icons/tools/github-copilot-icon.jpg",
     url: "https://github.com/features/copilot",
     tags: ["coding", "programming", "development"],
+    featured: false,
+    rating: 4.6
   },
   {
     id: "4",
     name: "Notion AI",
-    description: "AI-powered productivity and writing assistant",
+    description: "AI-powered productivity assistant integrated into your workspace",
     category: "Writing",
     image: "/icons/tools/notion-icon.jpg",
     url: "https://notion.so/product/ai",
     tags: ["productivity", "writing", "organization"],
+    featured: false,
+    rating: 4.4
   },
   {
     id: "5",
     name: "RunwayML",
-    description: "AI video editing and generation tools",
+    description: "Professional AI video editing and generation platform",
     category: "Video",
     image: "/icons/tools/runway-icon.jpg",
     url: "https://runwayml.com",
     tags: ["video editing", "generation", "creative"],
+    featured: false,
+    rating: 4.3
   },
   {
     id: "6",
     name: "Claude AI",
-    description: "Anthropic's helpful AI assistant",
+    description: "Anthropic's helpful AI assistant for analysis, writing, and reasoning",
     category: "Writing",
     image: "/icons/tools/claude-icon.jpg",
     url: "https://claude.ai",
     tags: ["conversation", "analysis", "writing"],
+    featured: false,
+    rating: 4.5
   },
+  {
+    id: "7",
+    name: "Stable Diffusion",
+    description: "Open-source AI model for generating high-quality images from text",
+    category: "Image",
+    image: "/placeholder.svg?height=64&width=64&text=SD",
+    url: "https://stability.ai/stable-diffusion",
+    tags: ["image generation", "open source", "text-to-image"],
+    featured: false,
+    rating: 4.2
+  },
+  {
+    id: "8",
+    name: "Cursor",
+    description: "AI-powered code editor built for productivity and collaboration",
+    category: "Code",
+    image: "/placeholder.svg?height=64&width=64&text=CR",
+    url: "https://cursor.sh",
+    tags: ["code editor", "AI assistant", "development"],
+    featured: false,
+    rating: 4.4
+  }
 ];
 
 export const getStaticProps: GetStaticProps = async () => {
@@ -243,6 +279,8 @@ export default function AIToolsDirectory({ tools = [], pageTitle, pageDescriptio
                   tagline={tool.description}
                   category={tool.category}
                   url={tool.url}
+                  featured={tool.featured}
+                  rating={tool.rating}
                 />
               ))}
             </div>
