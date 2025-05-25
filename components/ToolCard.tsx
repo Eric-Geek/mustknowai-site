@@ -70,7 +70,7 @@ export const ToolCard = memo(function ToolCard({
               fallbackSrc={logo}
               size={isStandard ? 64 : 48}
               priority={featured}
-              alt={`${name} Logo`}
+                alt={`${name} Logo`}
               className="p-1.5"
             />
           </div>
