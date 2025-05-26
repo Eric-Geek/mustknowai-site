@@ -29,7 +29,7 @@ export default function LandingPage() {
         <Hyperspeed speed={1.5} effectOpacity={0.9} starCount={1000} />
         
                  {/* SplashCursor 动画 */}
-         <SplashCursor size={40} color="#60a5fa" trailLength={50} />
+         <SplashCursor size={45} trailLength={60} />
 
                  {/* 主标题 - 居中显示 */}
          <div className="relative z-10 flex items-center justify-center min-h-screen px-4">

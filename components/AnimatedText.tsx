@@ -10,7 +10,6 @@ interface AnimatedTextProps {
 export default function AnimatedText({ text, className = '', style = {} }: AnimatedTextProps) {
   const [displayText, setDisplayText] = useState('');
   const [isComplete, setIsComplete] = useState(false);
-  const [showGlitch, setShowGlitch] = useState(false);
 
   useEffect(() => {
     let currentIndex = 0;
@@ -21,14 +20,6 @@ export default function AnimatedText({ text, className = '', style = {} }: Anima
       } else {
         clearInterval(typewriterInterval);
         setIsComplete(true);
-        
-        // 启动间歇性故障效果
-        const glitchInterval = setInterval(() => {
-          setShowGlitch(true);
-          setTimeout(() => setShowGlitch(false), 150);
-        }, 3000 + Math.random() * 2000);
-
-        return () => clearInterval(glitchInterval);
       }
     }, 100);
 
@@ -39,17 +30,20 @@ export default function AnimatedText({ text, className = '', style = {} }: Anima
     <div className={`relative ${className}`} style={style}>
       {/* 主文字 */}
       <h1 
-        className="font-bold tracking-tight select-none transition-all duration-500 text-center text-white"
+        className="font-bold tracking-tight select-none transition-all duration-500 text-center relative z-10"
         style={{
           fontFamily: 'system-ui, -apple-system, sans-serif',
-          textShadow: '0 0 20px rgba(96, 165, 250, 0.5), 0 0 40px rgba(96, 165, 250, 0.3)',
-          ...(isComplete && {
-            background: 'linear-gradient(-45deg, #60a5fa, #a855f7, #ec4899, #60a5fa)',
+          ...(isComplete ? {
+            background: 'linear-gradient(-45deg, #60a5fa, #a855f7, #ec4899, #f59e0b, #10b981, #06b6d4, #60a5fa)',
             backgroundSize: '400% 400%',
             backgroundClip: 'text',
             WebkitBackgroundClip: 'text',
             color: 'transparent',
-            animation: 'gradient-flow 3s ease infinite'
+            animation: 'rainbow-flow-slow 6s ease infinite, gentle-breathe 4s ease-in-out infinite',
+            textShadow: 'none'
+          } : {
+            color: 'white',
+            textShadow: '0 0 20px rgba(96, 165, 250, 0.5), 0 0 40px rgba(96, 165, 250, 0.3)'
           })
         }}
       >
@@ -59,47 +53,71 @@ export default function AnimatedText({ text, className = '', style = {} }: Anima
         )}
       </h1>
 
-      {/* 故障效果层 */}
-      {showGlitch && isComplete && (
-        <>
-          <h1 
-            className="absolute top-0 left-0 w-full font-bold tracking-tight select-none text-center pointer-events-none"
-            style={{
-              color: '#ff0066',
-              transform: 'translate(-2px, 0)',
-              opacity: 0.6,
-              fontFamily: 'system-ui, -apple-system, sans-serif',
-              fontSize: 'inherit'
-            }}
-          >
-            {displayText}
-          </h1>
-          <h1 
-            className="absolute top-0 left-0 w-full font-bold tracking-tight select-none text-center pointer-events-none"
-            style={{
-              color: '#00ffff',
-              transform: 'translate(2px, 0)',
-              opacity: 0.6,
-              fontFamily: 'system-ui, -apple-system, sans-serif',
-              fontSize: 'inherit'
-            }}
-          >
-            {displayText}
-          </h1>
-        </>
-      )}
+
 
       <style jsx>{`
-        @keyframes gradient-flow {
+        @keyframes rainbow-flow-slow {
           0% {
             background-position: 0% 50%;
           }
-          50% {
+          25% {
             background-position: 100% 50%;
+          }
+          50% {
+            background-position: 100% 100%;
+          }
+          75% {
+            background-position: 0% 100%;
           }
           100% {
             background-position: 0% 50%;
           }
+        }
+        
+        @keyframes gentle-breathe {
+          0%, 100% {
+            transform: scale(1);
+          }
+          50% {
+            transform: scale(1.02);
+          }
+        }
+        
+        /* 添加发光效果 */
+        h1 {
+          position: relative;
+        }
+        
+        h1::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          background: inherit;
+          background-clip: inherit;
+          -webkit-background-clip: inherit;
+          filter: blur(15px);
+          opacity: 0.4;
+          z-index: -1;
+          animation: inherit;
+        }
+        
+        h1::after {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          background: inherit;
+          background-clip: inherit;
+          -webkit-background-clip: inherit;
+          filter: blur(30px);
+          opacity: 0.2;
+          z-index: -2;
+          animation: inherit;
         }
       `}</style>
     </div>
