@@ -64,6 +64,7 @@ export const ToolCard = memo(function ToolCard({
             transition-transform duration-300 group-hover:scale-110
             ${isStandard ? "w-16 h-16" : "w-12 h-12"}
           `}>
+            {/* <img src={logo} alt="" /> */}
             <SmartIcon
               name={name}
               type="tool"
