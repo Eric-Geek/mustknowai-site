@@ -4,6 +4,8 @@ import { useRouter } from 'next/router';
 import Head from 'next/head';
 import { cn } from '@/lib/utils';
 import { ThemeProvider } from '@/components/theme-provider';
+import Navbar from '@/components/Navbar';
+import Footer from '@/components/Footer';
 
 const fontSans = FontSans({
   subsets: ['latin'],
@@ -31,7 +33,11 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         )}
       >
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-          {children}
+          <Navbar />
+          <main className="min-h-[calc(100vh-64px-300px)]">
+            {children}
+          </main>
+          <Footer />
         </ThemeProvider>
       </body>
     </html>
