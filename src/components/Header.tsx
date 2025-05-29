@@ -5,8 +5,6 @@ import {
   Settings, 
   Globe, 
   Menu, 
-  Sun, 
-  Moon,
   X 
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -16,11 +14,12 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import ThemeToggle from './ThemeToggle';
 
 const navLinks = [
-  { href: "/", label: "Discover", description: "发现AI工具" },
-  { href: "/submit", label: "Submit", description: "提交工具" },
-  { href: "/pricing", label: "Pricing", description: "价格方案" },
+  { href: "/", label: "Discover", description: "Discover AI Tools" },
+  { href: "/submit", label: "Submit", description: "Submit Tools" },
+  { href: "/pricing", label: "Pricing", description: "Pricing Plans" },
 ];
 
 const languages = [
@@ -31,17 +30,11 @@ const languages = [
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isDark, setIsDark] = useState(false);
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
     setMounted(true);
   }, []);
-
-  const toggleTheme = () => {
-    setIsDark(!isDark);
-    document.documentElement.classList.toggle('dark');
-  };
 
   const isActive = (href: string) => {
     return window.location.pathname === href;
@@ -152,26 +145,7 @@ const Header = () => {
             </DropdownMenu>
 
             {/* Theme Toggle */}
-            <motion.div
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={toggleTheme}
-                className="h-9 w-9 p-0"
-              >
-                <motion.div
-                  animate={{ rotate: isDark ? 180 : 0 }}
-                  transition={{ type: "spring", stiffness: 200, damping: 20 }}
-                >
-                  <Sun className="h-4 w-4 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
-                  <Moon className="absolute h-4 w-4 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
-                </motion.div>
-                <span className="sr-only">Toggle theme</span>
-              </Button>
-            </motion.div>
+            <ThemeToggle />
 
             {/* Login Button */}
             <motion.div
@@ -193,20 +167,7 @@ const Header = () => {
           {/* Mobile Controls */}
           <div className="flex md:hidden items-center space-x-2">
             {/* Mobile Theme Toggle */}
-            <motion.div
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={toggleTheme}
-                className="h-9 w-9 p-0"
-              >
-                <Sun className="h-4 w-4 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
-                <Moon className="absolute h-4 w-4 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
-              </Button>
-            </motion.div>
+            <ThemeToggle />
 
             {/* Mobile Menu */}
             <motion.div
@@ -274,7 +235,7 @@ const Header = () => {
                 transition={{ delay: 0.3 }}
               >
                 <div className="flex items-center justify-between mb-4">
-                  <span className="text-sm font-medium text-gray-700 dark:text-gray-300">语言</span>
+                  <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Language</span>
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                       <Button variant="ghost" size="sm" className="text-sm">

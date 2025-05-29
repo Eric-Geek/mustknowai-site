@@ -1,4 +1,3 @@
-
 import React from 'react';
 import ToolCard from './ToolCard';
 
@@ -42,14 +41,14 @@ const justLaunchedTools = [
 
 const JustLaunched = () => {
   return (
-    <section className="py-16 px-4">
+    <section className="pt-8 pb-12 px-4">
       <div className="container mx-auto">
-        <h2 className="text-3xl font-bold text-foreground mb-8">Just Launched</h2>
+        <h2 className="text-2xl md:text-3xl font-bold text-foreground mb-6">Just Launched</h2>
         
         <div className="relative">
-          <div className="flex gap-6 overflow-x-auto scroll-container pb-4">
+          <div className="flex gap-4 overflow-x-auto scroll-container pb-4">
             {justLaunchedTools.map((tool, index) => (
-              <div key={index} className="flex-none w-80">
+              <div key={index} className="flex-none w-72 md:w-80">
                 <ToolCard {...tool} />
               </div>
             ))}

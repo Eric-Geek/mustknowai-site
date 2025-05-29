@@ -1,96 +1,123 @@
-# MustKnowAI Discovery Hub
+# MustKnowAI - AI Tools Discovery Platform
 
-一个基于 Vite + React + shadcn/ui 的AI工具发现平台。
+一个现代化的AI工具发现平台，帮助用户发现、比较和选择最适合的AI工具。
 
-## 项目特性
+## 🚀 最新功能
 
-- ⚡ Vite 构建工具，快速开发体验
-- ⚛️ React 18 + TypeScript
-- 🎨 shadcn/ui 组件库
-- 💅 Tailwind CSS 样式框架
-- 🔄 React Router 路由管理
-- 📱 响应式设计
-- 🌗 支持暗色/亮色主题切换
+### ✨ 核心功能
+- **AI工具目录** - 浏览数千个精选AI工具
+- **智能搜索** - 快速找到您需要的AI工具
+- **分类筛选** - 按类别、价格、功能筛选工具
+- **工具提交** - 提交您的AI工具到平台
+- **定价方案** - 灵活的订阅选项
 
-## 技术栈
+### 🎨 UI/UX改进
+- **主题切换** - 支持亮色/暗色/系统主题，带有持久化存储
+- **响应式设计** - 完美适配桌面、平板和手机
+- **优化布局** - 紧凑的间距和更好的视觉层次
+- **动画效果** - 流畅的交互动画和过渡效果
 
-- **前端框架**: React 18
-- **构建工具**: Vite
-- **语言**: TypeScript
-- **样式**: Tailwind CSS
-- **UI组件**: shadcn/ui + Radix UI
+### 📱 页面功能
+
+#### 🏠 主页 (/)
+- 英雄区域展示
+- 热门工具推荐
+- 最新发布工具
+- 分类浏览
+- 搜索功能
+
+#### 📝 提交页面 (/submit)
+- 完整的工具提交表单
+- 表单验证和错误处理
+- 成功提交确认页面
+- 响应式设计
+
+#### 💰 定价页面 (/pricing)
+- 三层定价方案 (Free/Professional/Enterprise)
+- 月付/年付切换 (年付享17%折扣)
+- 详细功能对比表
+- 客户评价和FAQ
+- 响应式设计
+
+#### 🔍 404页面
+- 美观的错误页面设计
+- 有用的导航选项
+- 联系信息
+
+### 🔧 技术特性
+- **现代技术栈**: React 18 + TypeScript + Vite
+- **组件库**: shadcn/ui + Tailwind CSS
+- **动画**: Framer Motion
 - **路由**: React Router
-- **状态管理**: TanStack Query
-- **图标**: Lucide React
+- **主题**: 暗色/亮色模式切换
+- **响应式**: 移动端优先设计
 
-## 项目结构
+### 🌐 多语言支持
+- 英文界面 (主要语言)
+- 支持语言切换功能
+- 国际化友好设计
 
-```
-src/
-├── components/          # React组件
-│   ├── ui/             # shadcn/ui组件
-│   ├── Header.tsx      # 头部组件
-│   ├── HeroSection.tsx # 英雄区域
-│   ├── Footer.tsx      # 底部组件
-│   └── ...
-├── pages/              # 页面组件
-│   ├── Index.tsx       # 首页
-│   └── NotFound.tsx    # 404页面
-├── lib/                # 工具函数
-│   └── utils.ts        # 通用工具函数
-├── hooks/              # 自定义Hook
-├── App.tsx             # 根组件
-└── main.tsx            # 应用入口
-```
-
-## 开发指南
-
-### 安装依赖
+## 🛠️ 安装和运行
 
 ```bash
+# 安装依赖
 npm install
-```
 
-### 启动开发服务器
-
-```bash
+# 启动开发服务器
 npm run dev
-```
 
-应用将在 http://localhost:8080 运行
-
-### 构建生产版本
-
-```bash
+# 构建生产版本
 npm run build
-```
 
-### 预览生产构建
-
-```bash
+# 预览生产构建
 npm run preview
 ```
 
-## 迁移说明
+## 📦 项目结构
 
-此项目已从 Next.js 成功迁移到 Vite + React：
+```
+src/
+├── components/          # 可复用组件
+│   ├── ui/             # UI基础组件
+│   ├── Header.tsx      # 网站头部
+│   ├── Footer.tsx      # 网站尾部
+│   └── ThemeToggle.tsx # 主题切换器
+├── pages/              # 页面组件
+│   ├── Index.tsx       # 主页
+│   ├── Submit.tsx      # 提交页面
+│   ├── Pricing.tsx     # 定价页面
+│   └── NotFound.tsx    # 404页面
+└── App.tsx             # 应用主组件
+```
 
-- ✅ 保留了所有 shadcn/ui 组件和样式配置
-- ✅ 将 Next.js 路由系统改为 React Router
-- ✅ 更新了构建配置和依赖
-- ✅ 保持了原有的设计风格和功能
-- ✅ 改进了开发体验和构建速度
+## 🚀 部署
 
-## 部署
+项目支持多种部署方式：
 
-项目可以部署到任何支持静态网站的平台，如：
-- Vercel
-- Netlify  
-- GitHub Pages
-- Cloudflare Pages
+- **Vercel**: 推荐，零配置部署
+- **Netlify**: 静态站点托管
+- **GitHub Pages**: 免费静态托管
 
-构建后的文件将生成在 `dist/` 目录中。
+构建后的文件在 `dist/` 目录中，可以部署到任何静态文件服务器。
 
-## 许可证
+## 📋 待办功能
 
-此项目基于 MIT 许可证开源。 
+- [ ] 用户认证系统
+- [ ] 工具收藏功能
+- [ ] 工具评分系统
+- [ ] 高级搜索筛选
+- [ ] API开发
+- [ ] 数据分析面板
+
+## 🤝 贡献
+
+欢迎贡献代码！请先阅读贡献指南。
+
+## 📄 许可证
+
+MIT License
+
+---
+
+🔗 **网站**: [MustKnowAI](https://mustknowai.com)
+📧 **联系**: support@mustknowai.com 

@@ -1,4 +1,3 @@
-
 import React from 'react';
 
 const recommendedTools = [
@@ -55,19 +54,19 @@ const recommendedTools = [
 
 const RecommendTools = () => {
   return (
-    <section className="py-16 px-4">
+    <section className="py-8 px-4">
       <div className="container mx-auto">
-        <h2 className="text-3xl font-bold text-foreground mb-8">Recommend Tools</h2>
+        <h2 className="text-2xl md:text-3xl font-bold text-foreground mb-6">Recommend Tools</h2>
         
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           {recommendedTools.map((tool, index) => (
-            <div key={index} className="bg-card rounded-xl border border-border p-6 hover-lift cursor-pointer group">
-              <div className="flex items-center space-x-4 mb-4">
-                <div className="w-12 h-12 rounded-full bg-accent flex items-center justify-center text-2xl">
+            <div key={index} className="bg-card rounded-lg border border-border p-4 hover-lift cursor-pointer group">
+              <div className="flex items-center space-x-3 mb-3">
+                <div className="w-10 h-10 rounded-lg bg-accent flex items-center justify-center text-xl">
                   {tool.icon}
                 </div>
                 <div className="flex-1">
-                  <h3 className="font-semibold text-foreground group-hover:text-brand-purple transition-colors">
+                  <h3 className="font-semibold text-foreground group-hover:text-brand-purple transition-colors text-sm">
                     {tool.name}
                   </h3>
                   <p className="text-xs text-muted-foreground">
@@ -76,12 +75,12 @@ const RecommendTools = () => {
                 </div>
               </div>
               
-              <p className="text-sm text-muted-foreground mb-4">
+              <p className="text-xs text-muted-foreground mb-3">
                 {tool.description}
               </p>
               
               {tool.promoCode && (
-                <div className="bg-brand-purple/10 border border-brand-purple/20 rounded-lg p-2 text-center">
+                <div className="bg-brand-purple/10 border border-brand-purple/20 rounded-md p-2 text-center">
                   <span className="text-brand-purple text-xs font-medium">
                     Code: {tool.promoCode}
                   </span>
