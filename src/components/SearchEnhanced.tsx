@@ -127,7 +127,7 @@ export const SearchEnhanced: React.FC<SearchProps> = ({
           {suggestions.length > 0 && (
             <div>
               <div className="px-4 py-2 text-sm font-medium text-gray-500 dark:text-gray-400 border-b border-gray-200 dark:border-gray-700">
-                搜索建议
+                Search Suggestions
               </div>
               {suggestions.map((suggestion, index) => (
                 <button
@@ -146,12 +146,12 @@ export const SearchEnhanced: React.FC<SearchProps> = ({
           {searchHistory.length > 0 && (
             <div>
               <div className="px-4 py-2 text-sm font-medium text-gray-500 dark:text-gray-400 border-b border-gray-200 dark:border-gray-700 flex items-center justify-between">
-                <span>搜索历史</span>
+                <span>Search History</span>
                 <button
                   onClick={clearSearchHistory}
                   className="text-xs text-brand-purple hover:text-brand-purple/80"
                 >
-                  清除
+                  Clear
                 </button>
               </div>
               {searchHistory.slice(0, 5).map((item, index) => (
@@ -172,7 +172,7 @@ export const SearchEnhanced: React.FC<SearchProps> = ({
       {/* 搜索状态指示器 */}
       {isSearching && (
         <div className="absolute top-full mt-1 left-0 text-sm text-gray-500 dark:text-gray-400">
-          搜索中...
+          Searching...
         </div>
       )}
     </div>
