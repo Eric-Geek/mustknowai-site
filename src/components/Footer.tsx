@@ -1,10 +1,71 @@
-
 import React from 'react';
-import { Github, Link as LinkIcon } from 'lucide-react';
+import { Github, Link as LinkIcon, Facebook, Twitter, Linkedin } from 'lucide-react';
 
 const Footer = () => {
+  const currentYear = new Date().getFullYear();
+  
+  const footerData = {
+    solution: [
+      { label: 'Submit AI', href: '/submit' },
+      { label: 'Pricing', href: '/pricing' }
+    ],
+    links: [
+      { label: 'Home', href: '/' },
+      { label: 'Blog', href: '/blog' },
+      { label: 'About', href: '/about' }
+    ],
+    legal: [
+      { label: 'Terms', href: '/terms' },
+      { label: 'Privacy Policy', href: '/privacy' }
+    ],
+    recommended: [
+      { label: 'ChatGPT', href: 'https://chat.openai.com', external: true },
+      { label: 'Midjourney', href: 'https://midjourney.com', external: true },
+      { label: 'Claude', href: 'https://claude.ai', external: true }
+    ]
+  };
+
+  const socialLinks = [
+    { name: 'Facebook', icon: Facebook, href: '#' },
+    { name: 'Twitter', icon: Twitter, href: '#' },
+    { name: 'GitHub', icon: Github, href: '#' },
+    { name: 'LinkedIn', icon: Linkedin, href: '#' }
+  ];
+
+  const languages = [
+    { label: 'English', code: 'en' },
+    { label: '中文', code: 'zh' },
+    { label: 'Deutsch', code: 'de' },
+    { label: '日本語', code: 'ja' },
+    { label: 'Français', code: 'fr' }
+  ];
+
+  const FooterSection = ({ title, links }) => (
+    <div>
+      <h3 className="font-semibold text-foreground mb-4">{title}</h3>
+      <ul className="space-y-2">
+        {links.map(({ label, href, external }) => (
+          <li key={label}>
+            <a 
+              href={href} 
+              className="text-muted-foreground hover:text-brand-purple transition-colors flex items-center"
+              {...(external && { target: "_blank", rel: "noopener noreferrer" })}
+            >
+              {label}
+              {external && <LinkIcon className="w-3 h-3 ml-1" />}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+
   return (
-    <footer className="bg-card border-t border-border py-16 px-4">
+    <footer 
+      className="bg-card border-t border-border py-16 px-4"
+      role="contentinfo"
+      aria-label="Site footer"
+    >
       <div className="container mx-auto">
         {/* Main footer content */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8 mb-12">
@@ -25,83 +86,49 @@ const Footer = () => {
             
             {/* Social icons */}
             <div className="flex space-x-4">
-              <a href="#" className="p-2 bg-accent rounded-lg hover:bg-brand-purple hover:text-white transition-colors">
-                <div className="w-5 h-5 bg-current rounded-sm"></div>
-              </a>
-              <a href="#" className="p-2 bg-accent rounded-lg hover:bg-brand-purple hover:text-white transition-colors">
-                <div className="w-5 h-5 bg-current rounded-full"></div>
-              </a>
-              <a href="#" className="p-2 bg-accent rounded-lg hover:bg-brand-purple hover:text-white transition-colors">
-                <Github className="w-5 h-5" />
-              </a>
-              <a href="#" className="p-2 bg-accent rounded-lg hover:bg-brand-purple hover:text-white transition-colors">
-                <div className="w-5 h-5 bg-current"></div>
-              </a>
+              {socialLinks.map(({ name, icon: Icon, href }) => (
+                <a
+                  key={name}
+                  href={href}
+                  aria-label={name}
+                  className="p-2 bg-accent rounded-lg hover:bg-brand-purple hover:text-white transition-colors"
+                >
+                  <Icon className="w-5 h-5" />
+                </a>
+              ))}
             </div>
           </div>
 
-          {/* Solution */}
+          <FooterSection title="Solution" links={footerData.solution} />
+          <FooterSection title="Links" links={footerData.links} />
+          
           <div>
-            <h3 className="font-semibold text-foreground mb-4">Solution</h3>
-            <ul className="space-y-2">
-              <li><a href="#" className="text-muted-foreground hover:text-brand-purple transition-colors">Submit AI</a></li>
-              <li><a href="#" className="text-muted-foreground hover:text-brand-purple transition-colors">Pricing</a></li>
-            </ul>
-          </div>
-
-          {/* Links */}
-          <div>
-            <h3 className="font-semibold text-foreground mb-4">Links</h3>
-            <ul className="space-y-2">
-              <li><a href="#" className="text-muted-foreground hover:text-brand-purple transition-colors">Home</a></li>
-              <li><a href="#" className="text-muted-foreground hover:text-brand-purple transition-colors">Blog</a></li>
-              <li><a href="#" className="text-muted-foreground hover:text-brand-purple transition-colors">About</a></li>
-            </ul>
-          </div>
-
-          {/* Legal & Recommended */}
-          <div>
-            <h3 className="font-semibold text-foreground mb-4">Legal</h3>
-            <ul className="space-y-2 mb-6">
-              <li><a href="#" className="text-muted-foreground hover:text-brand-purple transition-colors">Terms</a></li>
-              <li><a href="#" className="text-muted-foreground hover:text-brand-purple transition-colors">Privacy Policy</a></li>
-            </ul>
-            
-            <h3 className="font-semibold text-foreground mb-4">Recommended</h3>
-            <ul className="space-y-2">
-              <li>
-                <a href="#" className="text-muted-foreground hover:text-brand-purple transition-colors flex items-center">
-                  ChatGPT <LinkIcon className="w-3 h-3 ml-1" />
-                </a>
-              </li>
-              <li>
-                <a href="#" className="text-muted-foreground hover:text-brand-purple transition-colors flex items-center">
-                  Midjourney <LinkIcon className="w-3 h-3 ml-1" />
-                </a>
-              </li>
-              <li>
-                <a href="#" className="text-muted-foreground hover:text-brand-purple transition-colors flex items-center">
-                  Claude <LinkIcon className="w-3 h-3 ml-1" />
-                </a>
-              </li>
-            </ul>
+            <FooterSection title="Legal" links={footerData.legal} />
+            <div className="mt-6">
+              <FooterSection title="Recommended" links={footerData.recommended} />
+            </div>
           </div>
         </div>
 
         {/* Language selector */}
         <div className="border-t border-border pt-8 mb-8">
-          <div className="flex flex-wrap gap-4 text-sm text-muted-foreground">
-            <a href="#" className="hover:text-brand-purple transition-colors">English</a>
-            <a href="#" className="hover:text-brand-purple transition-colors">中文</a>
-            <a href="#" className="hover:text-brand-purple transition-colors">Deutsch</a>
-            <a href="#" className="hover:text-brand-purple transition-colors">日本語</a>
-            <a href="#" className="hover:text-brand-purple transition-colors">Français</a>
-          </div>
+          <nav aria-label="Language selection" className="flex flex-wrap gap-4 text-sm text-muted-foreground">
+            {languages.map(({ label, code }) => (
+              <a 
+                key={code}
+                href={`?lang=${code}`}
+                lang={code}
+                className="hover:text-brand-purple transition-colors"
+              >
+                {label}
+              </a>
+            ))}
+          </nav>
         </div>
 
         {/* Copyright */}
         <div className="text-center text-muted-foreground text-sm">
-          © 2025 MustKnowAI. All rights reserved.
+          © {currentYear} MustKnowAI. All rights reserved.
         </div>
       </div>
     </footer>
