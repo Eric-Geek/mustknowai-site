@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Search, Filter, Grid, List, ChevronDown, Star, Users, Zap, Heart, Share2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -20,6 +21,7 @@ import {
 } from '@/components/ui/card';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import { getToolId, hasToolDetail } from '@/lib/toolMapping';
 
 // Categories - matching the main page HeroSection
 const categories = [
@@ -208,15 +210,11 @@ const Discover = () => {
     currentPage * toolsPerPage
   );
 
-  const ToolCard = ({ tool }: { tool: any }) => (
-    <motion.div
-      layout
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: -20 }}
-      whileHover={{ y: -5 }}
-      transition={{ duration: 0.2 }}
-    >
+  const ToolCard = ({ tool }: { tool: any }) => {
+    const toolId = getToolId(tool.name);
+    const hasDetail = hasToolDetail(tool.name);
+
+    const cardContent = (
       <Card className="group h-full overflow-hidden hover:shadow-lg transition-all duration-300 border-gray-200/50 dark:border-gray-800/50">
         <div className="relative">
           <img
@@ -269,13 +267,45 @@ const Discover = () => {
               {tool.stats}
             </div>
             <Button size="sm" className="bg-gradient-to-r from-blue-600 to-purple-600">
-              View Tool
+              {hasDetail ? 'View Details' : 'Visit Tool'}
             </Button>
           </div>
         </CardContent>
       </Card>
-    </motion.div>
-  );
+    );
+
+    // If the tool has a detail page, wrap with Link
+    if (hasDetail) {
+      return (
+        <motion.div
+          layout
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -20 }}
+          whileHover={{ y: -5 }}
+          transition={{ duration: 0.2 }}
+        >
+          <Link to={`/tool/${toolId}`} className="block">
+            {cardContent}
+          </Link>
+        </motion.div>
+      );
+    }
+
+    // Otherwise, return the card without Link wrapper
+    return (
+      <motion.div
+        layout
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        exit={{ opacity: 0, y: -20 }}
+        whileHover={{ y: -5 }}
+        transition={{ duration: 0.2 }}
+      >
+        {cardContent}
+      </motion.div>
+    );
+  };
 
   return (
     <div className="min-h-screen bg-background">

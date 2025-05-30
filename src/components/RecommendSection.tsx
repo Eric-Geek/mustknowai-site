@@ -1,6 +1,8 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { ArrowRight } from 'lucide-react';
+import { getToolId, hasToolDetail } from '@/lib/toolMapping';
 
 interface Tool {
   title: string;
@@ -95,33 +97,54 @@ const RecommendSection: React.FC<RecommendSectionProps> = ({ title, tools }) => 
         </div>
         
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-          {tools.map((tool, index) => (
-            <div key={index} className="bg-card rounded-lg border border-border p-4 hover-lift cursor-pointer group">
-              <div className="flex items-center space-x-3 mb-3">
-                <div className="w-10 h-10 rounded-lg bg-accent flex items-center justify-center text-xl">
-                  {tool.icon || getCategoryIcon(tool.category)}
+          {tools.map((tool, index) => {
+            const toolId = getToolId(tool.title);
+            const hasDetail = hasToolDetail(tool.title);
+
+            const cardContent = (
+              <div className="bg-card rounded-lg border border-border p-4 hover-lift cursor-pointer group">
+                <div className="flex items-center space-x-3 mb-3">
+                  <div className="w-10 h-10 rounded-lg bg-accent flex items-center justify-center text-xl">
+                    {tool.icon || getCategoryIcon(tool.category)}
+                  </div>
+                  <div className="flex-1">
+                    <h3 className="font-semibold text-foreground group-hover:text-brand-purple transition-colors text-sm">
+                      {tool.title}
+                    </h3>
+                    <p className="text-xs text-muted-foreground">
+                      {tool.stats || 'Popular tool'}
+                    </p>
+                  </div>
                 </div>
-                <div className="flex-1">
-                  <h3 className="font-semibold text-foreground group-hover:text-brand-purple transition-colors text-sm">
-                    {tool.title}
-                  </h3>
-                  <p className="text-xs text-muted-foreground">
-                    {tool.stats || 'Popular tool'}
-                  </p>
+                
+                <p className="text-xs text-muted-foreground mb-3">
+                  {tool.description}
+                </p>
+                
+                <div className="bg-accent/50 border border-border rounded-md p-2 text-center">
+                  <span className="text-brand-purple text-xs font-medium">
+                    {tool.category}
+                  </span>
                 </div>
               </div>
-              
-              <p className="text-xs text-muted-foreground mb-3">
-                {tool.description}
-              </p>
-              
-              <div className="bg-accent/50 border border-border rounded-md p-2 text-center">
-                <span className="text-brand-purple text-xs font-medium">
-                  {tool.category}
-                </span>
+            );
+
+            // If the tool has a detail page, wrap with Link
+            if (hasDetail) {
+              return (
+                <Link key={index} to={`/tool/${toolId}`} className="block">
+                  {cardContent}
+                </Link>
+              );
+            }
+
+            // Otherwise, return the card without Link wrapper
+            return (
+              <div key={index}>
+                {cardContent}
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </div>
     </section>

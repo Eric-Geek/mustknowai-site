@@ -1,4 +1,6 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
+import { getToolId, hasToolDetail } from '@/lib/toolMapping';
 
 const recommendedTools = [
   {
@@ -59,35 +61,56 @@ const RecommendTools = () => {
         <h2 className="text-2xl md:text-3xl font-bold text-foreground mb-6">Recommend Tools</h2>
         
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-          {recommendedTools.map((tool, index) => (
-            <div key={index} className="bg-card rounded-lg border border-border p-4 hover-lift cursor-pointer group">
-              <div className="flex items-center space-x-3 mb-3">
-                <div className="w-10 h-10 rounded-lg bg-accent flex items-center justify-center text-xl">
-                  {tool.icon}
+          {recommendedTools.map((tool, index) => {
+            const toolId = getToolId(tool.name);
+            const hasDetail = hasToolDetail(tool.name);
+
+            const cardContent = (
+              <div className="bg-card rounded-lg border border-border p-4 hover-lift cursor-pointer group">
+                <div className="flex items-center space-x-3 mb-3">
+                  <div className="w-10 h-10 rounded-lg bg-accent flex items-center justify-center text-xl">
+                    {tool.icon}
+                  </div>
+                  <div className="flex-1">
+                    <h3 className="font-semibold text-foreground group-hover:text-brand-purple transition-colors text-sm">
+                      {tool.name}
+                    </h3>
+                    <p className="text-xs text-muted-foreground">
+                      {tool.stats}
+                    </p>
+                  </div>
                 </div>
-                <div className="flex-1">
-                  <h3 className="font-semibold text-foreground group-hover:text-brand-purple transition-colors text-sm">
-                    {tool.name}
-                  </h3>
-                  <p className="text-xs text-muted-foreground">
-                    {tool.stats}
-                  </p>
-                </div>
+                
+                <p className="text-xs text-muted-foreground mb-3">
+                  {tool.description}
+                </p>
+                
+                {tool.promoCode && (
+                  <div className="bg-brand-purple/10 border border-brand-purple/20 rounded-md p-2 text-center">
+                    <span className="text-brand-purple text-xs font-medium">
+                      Code: {tool.promoCode}
+                    </span>
+                  </div>
+                )}
               </div>
-              
-              <p className="text-xs text-muted-foreground mb-3">
-                {tool.description}
-              </p>
-              
-              {tool.promoCode && (
-                <div className="bg-brand-purple/10 border border-brand-purple/20 rounded-md p-2 text-center">
-                  <span className="text-brand-purple text-xs font-medium">
-                    Code: {tool.promoCode}
-                  </span>
-                </div>
-              )}
-            </div>
-          ))}
+            );
+
+            // If the tool has a detail page, wrap with Link
+            if (hasDetail) {
+              return (
+                <Link key={index} to={`/tool/${toolId}`} className="block">
+                  {cardContent}
+                </Link>
+              );
+            }
+
+            // Otherwise, return the card without Link wrapper
+            return (
+              <div key={index}>
+                {cardContent}
+              </div>
+            );
+          })}
         </div>
       </div>
     </section>

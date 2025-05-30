@@ -8,6 +8,7 @@ import Index from "./pages/Index";
 import Submit from "./pages/Submit";
 import Pricing from "./pages/Pricing";
 import Discover from "./pages/Discover";
+import ToolDetail from "./pages/ToolDetail";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -27,6 +28,7 @@ const App = () => (
           <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/discover" element={<Discover />} />
+            <Route path="/tool/:toolId" element={<ToolDetail />} />
             <Route path="/submit" element={<Submit />} />
             <Route path="/pricing" element={<Pricing />} />
             <Route path="*" element={<NotFound />} />
