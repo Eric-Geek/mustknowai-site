@@ -1,4 +1,3 @@
-
 import React from 'react';
 import Header from '@/components/Header';
 import HeroSection from '@/components/HeroSection';
@@ -6,7 +5,7 @@ import JustLaunched from '@/components/JustLaunched';
 import BannerAd from '@/components/BannerAd';
 import RecommendTools from '@/components/RecommendTools';
 import HotTools from '@/components/HotTools';
-import CategorySection from '@/components/CategorySection';
+import RecommendSection from '@/components/RecommendSection';
 import FAQ from '@/components/FAQ';
 import Footer from '@/components/Footer';
 
@@ -99,9 +98,9 @@ const Index = () => {
       <BannerAd />
       <RecommendTools />
       <HotTools />
-      <CategorySection title="Free" tools={freeTools} />
-      <CategorySection title="Music" tools={musicTools} />
-      <CategorySection title="Voice" tools={voiceTools} />
+      <RecommendSection title="Free" tools={freeTools} />
+      <RecommendSection title="Music" tools={musicTools} />
+      <RecommendSection title="Voice" tools={voiceTools} />
       <FAQ />
       <Footer />
     </div>
