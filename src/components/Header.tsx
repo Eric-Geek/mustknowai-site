@@ -17,7 +17,7 @@ import {
 import ThemeToggle from './ThemeToggle';
 
 const navLinks = [
-  { href: "/", label: "Discover", description: "Discover AI Tools" },
+  { href: "/discover", label: "Discover", description: "Discover AI Tools" },
   { href: "/submit", label: "Submit", description: "Submit Tools" },
   { href: "/pricing", label: "Pricing", description: "Pricing Plans" },
 ];

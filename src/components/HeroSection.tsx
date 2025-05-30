@@ -24,6 +24,15 @@ const categories = [
 const HeroSection = () => {
   const [activeCategory, setActiveCategory] = useState('All Tools');
 
+  const handleCategoryClick = (categoryName: string) => {
+    setActiveCategory(categoryName);
+    // Navigate to discover page with category parameter
+    const url = categoryName === 'All Tools' 
+      ? '/discover' 
+      : `/discover?category=${encodeURIComponent(categoryName)}`;
+    window.location.href = url;
+  };
+
   return (
     <section className="pt-8 pb-6 px-4">
       <div className="container mx-auto text-center">
@@ -57,6 +66,7 @@ const HeroSection = () => {
               size="sm"
               className="absolute right-2 top-2 h-8 w-8 p-0 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 text-gray-600 dark:text-gray-300 rounded-lg"
               variant="ghost"
+              onClick={() => window.location.href = '/discover'}
             >
               <Search className="h-4 w-4" />
             </Button>
@@ -68,8 +78,8 @@ const HeroSection = () => {
           {categories.map((category) => (
             <button
               key={category.name}
-              onClick={() => setActiveCategory(category.name)}
-              className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 whitespace-nowrap ${
+              onClick={() => handleCategoryClick(category.name)}
+              className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 whitespace-nowrap hover:scale-105 ${
                 activeCategory === category.name
                   ? 'bg-brand-purple text-white shadow-md'
                   : 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 hover:text-gray-900 dark:hover:text-gray-100'
