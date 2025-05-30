@@ -5,6 +5,12 @@ import ToolCard from './ToolCard';
 
 const hotTools = [
   {
+    title: "GlobalGPT",
+    description: "Pay Once, Access All Top AI Models & Agents. One-stop platform for Claude, GPT-4o, Midjourney, and more premium AI tools.",
+    category: "Platform",
+    image: "/globalgpt-screenshot.png"
+  },
+  {
     title: "GPT-4 Turbo",
     description: "The most advanced language model from OpenAI with enhanced capabilities and faster response times.",
     category: "Chatbot",

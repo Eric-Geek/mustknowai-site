@@ -70,6 +70,89 @@ interface ToolData {
 
 // Sample tool data - in a real app, this would come from an API or database
 const toolsData: { [key: string]: ToolData } = {
+  'globalgpt': {
+    id: 'globalgpt',
+    name: 'GlobalGPT',
+    description: 'Pay Once, Access All Top AI Models & Agents in one platform',
+    category: 'Platform',
+    image: '/globalgpt-screenshot.png',
+    website: 'https://www.glbgpt.com',
+    addedDate: '1/20/2024',
+    monthlyVisits: '2.5M',
+    isFree: false,
+    rating: 4.9,
+    introduction: 'GlobalGPT is the ultimate AI aggregation platform offering one-time payment access to all premium AI models and agents.',
+    whatIs: 'GlobalGPT is a revolutionary AI aggregation platform that provides users with unified access to the world\'s most powerful AI models and agents. With the tagline "Pay Once, Access All Top AI Models & Agents," GlobalGPT eliminates the need for multiple subscriptions by offering a single platform where users can access Claude Sonnet 4, Claude Opus 4, GPT-4o, Midjourney V7, Runway, Grok 3 Beta, Llama 4, and many other cutting-edge AI tools. This comprehensive platform democratizes access to premium AI technology.',
+    coreFeatures: [
+      {
+        title: 'Unified AI Access',
+        description: 'Access Claude, GPT-4o, Midjourney, Runway, and 20+ premium AI models from a single dashboard.'
+      },
+      {
+        title: 'One-Time Payment Model',
+        description: 'Pay once and gain lifetime access to all premium AI models without recurring subscription fees.'
+      },
+      {
+        title: 'Latest AI Models',
+        description: 'Get access to the newest releases like Claude Sonnet 4, Midjourney V7, and Grok 3 Beta as soon as they\'re available.'
+      }
+    ],
+    usageCases: [
+      {
+        title: 'Content Creation',
+        description: 'Use multiple AI models for writing, image generation, and video creation in one streamlined workflow.'
+      },
+      {
+        title: 'AI Development & Research',
+        description: 'Compare and test different AI models for optimal performance in your specific use cases.'
+      },
+      {
+        title: 'Business Automation',
+        description: 'Leverage various AI agents and models to automate different aspects of your business operations.'
+      }
+    ],
+    howToUse: 'To use GlobalGPT, visit glbgpt.com and sign up for an account. Choose your preferred payment plan to unlock access to all available AI models. Navigate through the intuitive interface to select and use different AI models like Claude, GPT-4o, Midjourney, and more from a single dashboard.',
+    audience: ['AI Enthusiasts', 'Content Creators', 'Developers and Researchers', 'Digital Marketers', 'Business Professionals', 'Entrepreneurs'],
+    pricing: {
+      isFree: false,
+      description: 'GlobalGPT operates on a unique "Pay Once, Access All" model. Instead of multiple monthly subscriptions, users can purchase lifetime access to all premium AI models and agents through various pricing tiers designed for different usage levels.'
+    },
+    faq: [
+      {
+        question: 'Which AI models are available on GlobalGPT?',
+        answer: 'GlobalGPT provides access to 20+ premium AI models including Claude Sonnet 4, Claude Opus 4, GPT-4o, Midjourney V7, Runway, Grok 3 Beta, Llama 4, AI Detector, and many more.'
+      },
+      {
+        question: 'How does the "Pay Once" model work?',
+        answer: 'Instead of paying multiple monthly subscriptions, you make a one-time payment to GlobalGPT and gain access to all available premium AI models and future releases.'
+      },
+      {
+        question: 'Are new AI models automatically included?',
+        answer: 'Yes, GlobalGPT continuously adds new AI models and agents to the platform, and existing users get access to these updates as part of their membership.'
+      }
+    ],
+    tags: ['AI Aggregation', 'Multiple AI Models', 'One-Time Payment', 'Claude', 'GPT-4o', 'Midjourney', 'AI Platform', 'Premium AI Access'],
+    alternatives: [
+      {
+        name: 'ChatGPT Plus',
+        description: 'OpenAI\'s premium subscription for GPT-4 access',
+        category: 'Chatbot',
+        visits: '1.8B'
+      },
+      {
+        name: 'Claude Pro',
+        description: 'Anthropic\'s premium Claude subscription service',
+        category: 'Chatbot',
+        visits: '50M'
+      },
+      {
+        name: 'Midjourney',
+        description: 'Premium AI image generation subscription service',
+        category: 'Design & Art',
+        visits: '89M'
+      }
+    ]
+  },
   'chatgpt': {
     id: 'chatgpt',
     name: 'ChatGPT',

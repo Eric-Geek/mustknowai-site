@@ -2,6 +2,7 @@
 export const getToolId = (toolName: string): string => {
   const toolMapping: { [key: string]: string } = {
     // Chatbots
+    'GlobalGPT': 'globalgpt',
     'ChatGPT': 'chatgpt',
     'ChatGPT Free': 'chatgpt',
     'GPT-4 Turbo': 'chatgpt',
@@ -74,6 +75,6 @@ export const getToolId = (toolName: string): string => {
 
 // Check if tool detail page exists
 export const hasToolDetail = (toolName: string): boolean => {
-  const toolsWithDetails = ['ChatGPT', 'ChatGPT Free', 'GPT-4 Turbo', 'Midjourney', 'Midjourney V6'];
+  const toolsWithDetails = ['GlobalGPT', 'ChatGPT', 'ChatGPT Free', 'GPT-4 Turbo', 'Midjourney', 'Midjourney V6'];
   return toolsWithDetails.includes(toolName);
 }; 
