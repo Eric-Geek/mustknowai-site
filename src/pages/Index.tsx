@@ -90,7 +90,7 @@ const Index: React.FC = () => {
           "@type": "Offer",
           "price": tool.pricing === 'free' ? "0" : tool.pricing === 'freemium' ? "0+" : "varies",
           "priceCurrency": "USD"
-        }
+  }
       }))
     }
   };
@@ -138,12 +138,12 @@ const Index: React.FC = () => {
         </script>
       </Helmet>
 
-      <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background">
         {/* 关键内容立即加载 */}
-        <Header />
+      <Header />
         
         <main role="main">
-          <HeroSection />
+      <HeroSection />
           
           {/* 非关键内容延迟加载 */}
           <LazySection
@@ -151,14 +151,14 @@ const Index: React.FC = () => {
             rootMargin="100px"
             fallback={<HeroSkeleton />}
           >
-            <JustLaunched />
+      <JustLaunched />
           </LazySection>
           
           <LazySection
             threshold={0.1}
             fallback={<SectionSkeleton height="h-32" />}
           >
-            <BannerAd />
+      <BannerAd />
           </LazySection>
           
           <LazySection
@@ -166,7 +166,7 @@ const Index: React.FC = () => {
             rootMargin="100px"
             fallback={<RecommendSkeleton />}
           >
-            <RecommendTools />
+      <RecommendTools />
           </LazySection>
           
           <LazySection
@@ -174,7 +174,7 @@ const Index: React.FC = () => {
             rootMargin="100px"
             fallback={<RecommendSkeleton />}
           >
-            <HotTools />
+      <HotTools />
           </LazySection>
           
           {/* 分类推荐部分 */}
@@ -215,7 +215,7 @@ const Index: React.FC = () => {
             threshold={0.1}
             fallback={<SectionSkeleton height="h-96" />}
           >
-            <FAQ />
+      <FAQ />
           </LazySection>
         </main>
         
@@ -224,9 +224,9 @@ const Index: React.FC = () => {
           rootMargin="200px"
           fallback={<SectionSkeleton height="h-64" className="rounded-none" />}
         >
-          <Footer />
+      <Footer />
         </LazySection>
-      </div>
+    </div>
     </ErrorBoundary>
   );
 };

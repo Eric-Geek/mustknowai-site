@@ -67,32 +67,32 @@ const RecommendTools = () => {
 
             const cardContent = (
               <div className="bg-card rounded-lg border border-border p-4 hover-lift cursor-pointer group">
-                <div className="flex items-center space-x-3 mb-3">
-                  <div className="w-10 h-10 rounded-lg bg-accent flex items-center justify-center text-xl">
-                    {tool.icon}
-                  </div>
-                  <div className="flex-1">
-                    <h3 className="font-semibold text-foreground group-hover:text-brand-purple transition-colors text-sm">
-                      {tool.name}
-                    </h3>
-                    <p className="text-xs text-muted-foreground">
-                      {tool.stats}
-                    </p>
-                  </div>
+              <div className="flex items-center space-x-3 mb-3">
+                <div className="w-10 h-10 rounded-lg bg-accent flex items-center justify-center text-xl">
+                  {tool.icon}
                 </div>
-                
-                <p className="text-xs text-muted-foreground mb-3">
-                  {tool.description}
-                </p>
-                
-                {tool.promoCode && (
-                  <div className="bg-brand-purple/10 border border-brand-purple/20 rounded-md p-2 text-center">
-                    <span className="text-brand-purple text-xs font-medium">
-                      Code: {tool.promoCode}
-                    </span>
-                  </div>
-                )}
+                <div className="flex-1">
+                  <h3 className="font-semibold text-foreground group-hover:text-brand-purple transition-colors text-sm">
+                    {tool.name}
+                  </h3>
+                  <p className="text-xs text-muted-foreground">
+                    {tool.stats}
+                  </p>
+                </div>
               </div>
+              
+              <p className="text-xs text-muted-foreground mb-3">
+                {tool.description}
+              </p>
+              
+              {tool.promoCode && (
+                <div className="bg-brand-purple/10 border border-brand-purple/20 rounded-md p-2 text-center">
+                  <span className="text-brand-purple text-xs font-medium">
+                    Code: {tool.promoCode}
+                  </span>
+                </div>
+              )}
+            </div>
             );
 
             // If the tool has a detail page, wrap with Link

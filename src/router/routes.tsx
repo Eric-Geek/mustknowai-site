@@ -33,6 +33,12 @@ export const routes = [
     description: 'Choose the right plan for your needs'
   },
   {
+    path: '/reset-password',
+    component: lazy(() => import('@/pages/ResetPassword')),
+    title: 'Reset Password - MustKnowAI',
+    description: 'Reset your account password'
+  },
+  {
     path: '*',
     component: lazy(() => import('@/pages/NotFound')),
     title: 'Page Not Found - MustKnowAI',

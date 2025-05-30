@@ -5,7 +5,10 @@ import {
   Settings, 
   Globe, 
   Menu, 
-  X 
+  X,
+  UserCircle,
+  LogOut,
+  User
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
@@ -15,6 +18,8 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import ThemeToggle from './ThemeToggle';
+import { useAuth } from '@/context/AuthContext';
+import { Auth } from '@/components/Auth';
 
 const navLinks = [
   { href: "/discover", label: "Discover", description: "Discover AI Tools" },
@@ -31,6 +36,8 @@ const languages = [
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
+  const [isAuthOpen, setIsAuthOpen] = useState(false);
+  const { user, signOut } = useAuth();
 
   useEffect(() => {
     setMounted(true);
@@ -147,7 +154,7 @@ const Header = () => {
             {/* Theme Toggle */}
             <ThemeToggle />
 
-            {/* Login Button */}
+            {/* Login/User Button */}
             <motion.div
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
@@ -155,12 +162,41 @@ const Header = () => {
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.3 }}
             >
-              <Button 
-                size="sm" 
-                className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white border-0 shadow-lg hover:shadow-xl transition-all duration-300"
-              >
-                Login
-              </Button>
+              {user ? (
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button 
+                      size="sm" 
+                      variant="outline"
+                      className="flex items-center gap-2"
+                    >
+                      <UserCircle className="h-4 w-4" />
+                      {user.email?.split('@')[0]}
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end">
+                    <DropdownMenuItem className="flex items-center gap-2 cursor-pointer">
+                      <User className="h-4 w-4" />
+                      <span>Profile</span>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem 
+                      className="flex items-center gap-2 cursor-pointer text-red-500 focus:text-red-500"
+                      onClick={() => signOut()}
+                    >
+                      <LogOut className="h-4 w-4" />
+                      <span>Logout</span>
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              ) : (
+                <Button 
+                  size="sm" 
+                  className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white border-0 shadow-lg hover:shadow-xl transition-all duration-300"
+                  onClick={() => setIsAuthOpen(true)}
+                >
+                  Login
+                </Button>
+              )}
             </motion.div>
           </div>
 
@@ -229,41 +265,46 @@ const Header = () => {
 
               {/* Mobile Footer */}
               <motion.div 
-                className="pt-4 border-t border-gray-200 dark:border-gray-800"
+                className="mt-6 pt-4 border-t border-gray-200 dark:border-gray-800"
                 initial={{ y: 20, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
                 transition={{ delay: 0.3 }}
               >
-                <div className="flex items-center justify-between mb-4">
-                  <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Language</span>
-                  <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                      <Button variant="ghost" size="sm" className="text-sm">
-                        🇺🇸 English <ChevronDown className="ml-1 h-3 w-3" />
-                      </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent>
-                      {languages.map((lang) => (
-                        <DropdownMenuItem key={lang.code} className="flex items-center space-x-2">
-                          <span>{lang.flag}</span>
-                          <span>{lang.label}</span>
-                        </DropdownMenuItem>
-                      ))}
-                    </DropdownMenuContent>
-                  </DropdownMenu>
-                </div>
-                
-                <Button 
-                  className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white border-0"
-                  onClick={() => setIsMenuOpen(false)}
-                >
-                  Login
-                </Button>
+                {user ? (
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <UserCircle className="h-5 w-5" />
+                      <span className="text-sm font-medium">{user.email?.split('@')[0]}</span>
+                    </div>
+                    <Button 
+                      variant="ghost" 
+                      size="sm"
+                      onClick={() => signOut()}
+                      className="text-red-500 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-950/30"
+                    >
+                      <LogOut className="h-4 w-4 mr-2" />
+                      Logout
+                    </Button>
+                  </div>
+                ) : (
+                  <Button 
+                    className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700"
+                    onClick={() => {
+                      setIsMenuOpen(false);
+                      setIsAuthOpen(true);
+                    }}
+                  >
+                    Login
+                  </Button>
+                )}
               </motion.div>
             </div>
           </motion.div>
         )}
       </AnimatePresence>
+
+      {/* Auth Dialog */}
+      <Auth isOpen={isAuthOpen} onClose={() => setIsAuthOpen(false)} />
     </motion.nav>
   );
 };

@@ -88,7 +88,7 @@ const HotTools = () => {
       <div className="container mx-auto">
         <div className="flex items-center justify-between mb-6">
           <h2 className="text-2xl md:text-3xl font-bold text-foreground">Hot & Must-Have Tools</h2>
-          
+        
           {/* Navigation arrows */}
           <div className="hidden md:flex items-center gap-2">
             <Button

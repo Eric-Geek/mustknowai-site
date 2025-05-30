@@ -72,18 +72,18 @@ const ToolCard: React.FC<ToolCardProps> = ({
         <h3 className="font-semibold text-foreground group-hover:text-brand-purple transition-colors">
           {title}
         </h3>
-
+        
         {/* Description */}
         <p className="text-sm text-muted-foreground line-clamp-2">
           {description}
         </p>
 
         {/* Stats */}
-        {stats && (
+          {stats && (
           <p className="text-xs text-muted-foreground">
-            {stats}
+              {stats}
           </p>
-        )}
+          )}
 
         {/* Promo code */}
         {promoCode && (
@@ -104,7 +104,7 @@ const ToolCard: React.FC<ToolCardProps> = ({
             <ExternalLink className="w-3 h-3 mr-2" />
             {hasDetail ? 'View Details' : 'Visit Tool'}
           </Button>
-        </div>
+      </div>
       </div>
     </div>
   );

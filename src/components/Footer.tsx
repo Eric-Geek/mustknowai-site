@@ -94,7 +94,7 @@ const Footer = () => {
                   className="p-2 bg-accent rounded-lg hover:bg-brand-purple hover:text-white transition-colors"
                 >
                   <Icon className="w-5 h-5" />
-                </a>
+              </a>
               ))}
             </div>
           </div>
@@ -106,7 +106,7 @@ const Footer = () => {
             <FooterSection title="Legal" links={footerData.legal} />
             <div className="mt-6">
               <FooterSection title="Recommended" links={footerData.recommended} />
-            </div>
+          </div>
           </div>
         </div>
 

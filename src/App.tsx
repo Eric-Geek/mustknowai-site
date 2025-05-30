@@ -9,6 +9,7 @@ import { HelmetProvider } from "react-helmet-async";
 import ErrorBoundary from "@/components/ErrorBoundary";
 import { SectionSkeleton } from "@/components/LazySection";
 import { routes } from "@/router/routes";
+import { AuthProvider } from "@/context/AuthContext";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -47,28 +48,30 @@ const App: React.FC = () => (
       >
         <TooltipProvider>
           <ErrorBoundary>
-            <Toaster />
-            <Sonner />
-            <BrowserRouter>
-              <Suspense fallback={<PageLoader />}>
-                <Routes>
-                  {routes.map((route, index) => {
-                    const Component = route.component;
-                    return (
-                      <Route
-                        key={index}
-                        path={route.path}
-                        element={
-                          <ErrorBoundary>
-                            <Component />
-                          </ErrorBoundary>
-                        }
-                      />
-                    );
-                  })}
-                </Routes>
-              </Suspense>
-            </BrowserRouter>
+            <AuthProvider>
+              <Toaster />
+              <Sonner />
+              <BrowserRouter>
+                <Suspense fallback={<PageLoader />}>
+                  <Routes>
+                    {routes.map((route, index) => {
+                      const Component = route.component;
+                      return (
+                        <Route
+                          key={index}
+                          path={route.path}
+                          element={
+                            <ErrorBoundary>
+                              <Component />
+                            </ErrorBoundary>
+                          }
+                        />
+                      );
+                    })}
+                  </Routes>
+                </Suspense>
+              </BrowserRouter>
+            </AuthProvider>
           </ErrorBoundary>
         </TooltipProvider>
       </ThemeProvider>
