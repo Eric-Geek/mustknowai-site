@@ -1,109 +1,170 @@
-import React from 'react';
+import React, { lazy, Suspense, useEffect } from 'react';
+import { Helmet } from 'react-helmet-async';
 import Header from '@/components/Header';
 import HeroSection from '@/components/HeroSection';
-import JustLaunched from '@/components/JustLaunched';
-import BannerAd from '@/components/BannerAd';
-import RecommendTools from '@/components/RecommendTools';
-import HotTools from '@/components/HotTools';
-import RecommendSection from '@/components/RecommendSection';
-import FAQ from '@/components/FAQ';
-import Footer from '@/components/Footer';
+import ErrorBoundary from '@/components/ErrorBoundary';
+import { toolsData } from '@/data/tools';
+import { useInView } from 'react-intersection-observer';
 
-// Sample data for category sections
-const freeTools = [
-  {
-    title: "ChatGPT Free",
-    description: "Free access to OpenAI's powerful language model",
-    category: "Free",
-    image: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=400&h=300&fit=crop",
-    stats: "10M+ users"
-  },
-  {
-    title: "Hugging Face",
-    description: "Open-source machine learning platform",
-    category: "Free",
-    image: "https://images.unsplash.com/photo-1518770660439-4636190af475?w=400&h=300&fit=crop",
-    stats: "5M+ models"
-  },
-  {
-    title: "Google Colab",
-    description: "Free cloud-based notebook environment",
-    category: "Free",
-    image: "https://images.unsplash.com/photo-1461749280684-dccba630e2f6?w=400&h=300&fit=crop",
-    stats: "2M+ notebooks"
-  },
-  {
-    title: "Canva AI",
-    description: "Free AI-powered design tool",
-    category: "Free",
-    image: "https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?w=400&h=300&fit=crop",
-    stats: "100M+ designs"
-  }
-];
+// 懒加载组件
+const JustLaunched = lazy(() => import('@/components/JustLaunched'));
+const BannerAd = lazy(() => import('@/components/BannerAd'));
+const RecommendTools = lazy(() => import('@/components/RecommendTools'));
+const HotTools = lazy(() => import('@/components/HotTools'));
+const RecommendSection = lazy(() => import('@/components/RecommendSection'));
+const FAQ = lazy(() => import('@/components/FAQ'));
+const Footer = lazy(() => import('@/components/Footer'));
 
-const musicTools = [
-  {
-    title: "AIVA",
-    description: "AI music composition for creators",
-    category: "Music",
-    image: "https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?w=400&h=300&fit=crop",
-    stats: "500K+ compositions"
-  },
-  {
-    title: "Amper Music",
-    description: "AI-powered music creation platform",
-    category: "Music",
-    image: "https://images.unsplash.com/photo-1531297484001-80022131f5a1?w=400&h=300&fit=crop",
-    stats: "1M+ tracks"
-  },
-  {
-    title: "Soundraw",
-    description: "Generate royalty-free music with AI",
-    category: "Music",
-    image: "https://images.unsplash.com/photo-1605810230434-7631ac76ec81?w=400&h=300&fit=crop",
-    stats: "200K+ beats"
+// requestIdleCallback polyfill
+const requestIdleCallbackPolyfill = (callback: () => void, options?: { timeout?: number }) => {
+  if (typeof window.requestIdleCallback === 'function') {
+    return window.requestIdleCallback(callback, options);
+  } else {
+    // Fallback for browsers that don't support requestIdleCallback
+    return setTimeout(callback, options?.timeout || 1);
   }
-];
+};
 
-const voiceTools = [
-  {
-    title: "ElevenLabs",
-    description: "Advanced AI voice synthesis",
-    category: "Voice",
-    image: "https://images.unsplash.com/photo-1483058712412-4245e9b90334?w=400&h=300&fit=crop",
-    stats: "1M+ voices"
-  },
-  {
-    title: "Murf AI",
-    description: "AI voice generator for content",
-    category: "Voice",
-    image: "https://images.unsplash.com/photo-1472396961693-142e6e269027?w=400&h=300&fit=crop",
-    stats: "500K+ audio files"
-  },
-  {
-    title: "Resemble AI",
-    description: "Custom voice cloning platform",
-    category: "Voice",
-    image: "https://images.unsplash.com/photo-1465146344425-f00d5f5c8f07?w=400&h=300&fit=crop",
-    stats: "100K+ clones"
-  }
-];
+// 骨架屏组件
+const SectionSkeleton = ({ height = 'h-64' }: { height?: string }) => (
+  <div className={`${height} animate-pulse`}>
+    <div className="bg-gray-200 dark:bg-gray-700 rounded-lg w-full h-full" />
+  </div>
+);
+
+// 延迟加载包装组件
+const LazySection = ({ 
+  children, 
+  fallback, 
+  threshold = 0.1 
+}: { 
+  children: React.ReactNode; 
+  fallback?: React.ReactNode; 
+  threshold?: number;
+}) => {
+  const { ref, inView } = useInView({
+    threshold,
+    triggerOnce: true
+  });
+
+  return (
+    <div ref={ref}>
+      {inView ? (
+        <Suspense fallback={fallback || <SectionSkeleton />}>
+          {children}
+        </Suspense>
+      ) : (
+        fallback || <SectionSkeleton />
+      )}
+    </div>
+  );
+};
 
 const Index = () => {
+  // 预加载关键资源
+  useEffect(() => {
+    // 预加载下一个可能访问的页面
+    const preloadComponents = async () => {
+      const components = [
+        () => import('@/components/JustLaunched'),
+        () => import('@/components/RecommendTools'),
+      ];
+      
+      components.forEach(load => {
+        requestIdleCallbackPolyfill(() => load(), { timeout: 2000 });
+      });
+    };
+    
+    preloadComponents();
+  }, []);
+
   return (
-    <div className="min-h-screen bg-background">
-      <Header />
-      <HeroSection />
-      <JustLaunched />
-      <BannerAd />
-      <RecommendTools />
-      <HotTools />
-      <RecommendSection title="Free" tools={freeTools} />
-      <RecommendSection title="Music" tools={musicTools} />
-      <RecommendSection title="Voice" tools={voiceTools} />
-      <FAQ />
-      <Footer />
-    </div>
+    <ErrorBoundary>
+      <Helmet>
+        <title>MustKnowAI - Discover AI Tools to Make AI Work for You</title>
+        <meta name="description" content="Explore thousands of AI tools across categories including ChatGPT alternatives, music generation, voice synthesis, and more." />
+        <meta property="og:title" content="MustKnowAI - AI Tools Directory" />
+        <meta property="og:description" content="Discover the best AI tools for your needs" />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://mustknowai.com" />
+        <meta property="og:image" content="https://mustknowai.com/og-image.jpg" />
+        <link rel="canonical" href="https://mustknowai.com" />
+        
+        {/* 预连接到外部资源 */}
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="dns-prefetch" href="https://analytics.google.com" />
+        
+        {/* 结构化数据 */}
+        <script type="application/ld+json">
+          {JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "WebSite",
+            "name": "MustKnowAI",
+            "url": "https://mustknowai.com",
+            "potentialAction": {
+              "@type": "SearchAction",
+              "target": "https://mustknowai.com/search?q={search_term_string}",
+              "query-input": "required name=search_term_string"
+            }
+          })}
+        </script>
+      </Helmet>
+
+      <div className="min-h-screen bg-background">
+        {/* 关键内容立即加载 */}
+        <Header />
+        <main>
+          <HeroSection />
+          
+          {/* 非关键内容延迟加载 */}
+          <LazySection>
+            <JustLaunched />
+          </LazySection>
+          
+          <LazySection>
+            <BannerAd />
+          </LazySection>
+          
+          <LazySection>
+            <RecommendTools />
+          </LazySection>
+          
+          <LazySection>
+            <HotTools />
+          </LazySection>
+          
+          {/* 分类推荐部分 */}
+          <LazySection>
+            <RecommendSection 
+              title="Free" 
+              tools={toolsData.freeTools}
+            />
+          </LazySection>
+          
+          <LazySection>
+            <RecommendSection 
+              title="Music" 
+              tools={toolsData.musicTools}
+            />
+          </LazySection>
+          
+          <LazySection>
+            <RecommendSection 
+              title="Voice" 
+              tools={toolsData.voiceTools}
+            />
+          </LazySection>
+          
+          <LazySection>
+            <FAQ />
+          </LazySection>
+        </main>
+        
+        <LazySection threshold={0.5}>
+          <Footer />
+        </LazySection>
+      </div>
+    </ErrorBoundary>
   );
 };
 
