@@ -1,0 +1,18 @@
+# 请将优化后的WebP格式工具图片放置在此目录
+# 推荐的图片文件名：
+# - chatgpt.webp
+# - huggingface.webp
+# - colab.webp
+# - canva.webp
+# - aiva.webp
+# - amper.webp
+# - soundraw.webp
+# - elevenlabs.webp
+# - murf.webp
+# - resemble.webp
+
+# 图片优化建议：
+# - 尺寸：400x300px
+# - 格式：WebP
+# - 质量：80-90%
+# - 文件大小：<50KB 
