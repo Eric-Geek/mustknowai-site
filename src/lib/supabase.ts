@@ -7,12 +7,29 @@ if (!supabaseUrl || !supabaseAnonKey) {
   throw new Error('Missing Supabase environment variables')
 }
 
+// 获取当前站点URL，用于认证重定向
+let siteUrl = ''
+if (typeof window !== 'undefined') {
+  siteUrl = window.location.origin
+}
+
 // Create a single supabase client for interacting with your database
 export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
   auth: {
     autoRefreshToken: true,
     persistSession: true,
-    detectSessionInUrl: true
+    detectSessionInUrl: true,
+    flowType: 'pkce',
+    // 设置站点URL，用于认证重定向
+    ...(siteUrl && {
+      redirectTo: siteUrl,
+      cookieOptions: {
+        domain: window.location.hostname,
+        path: '/',
+        sameSite: 'lax',
+        secure: window.location.protocol === 'https:'
+      }
+    })
   },
   realtime: {
     params: {

@@ -107,17 +107,36 @@ export const Auth: React.FC<AuthProps> = ({ isOpen, onClose }) => {
   const handleRegister = async (values: RegisterValues) => {
     try {
       setIsLoading(true);
-      const { error } = await supabase.auth.signUp({
+      const siteUrl = window.location.origin;
+      
+      const { data, error } = await supabase.auth.signUp({
         email: values.email,
         password: values.password,
+        options: {
+          emailRedirectTo: `${siteUrl}/`
+        }
       });
 
       if (error) throw error;
+
+      // 判断是否需要邮箱验证
+      if (data?.user?.identities?.length === 0) {
+        toast({
+          title: "Error",
+          description: "The email address is already registered",
+          variant: "destructive",
+        });
+        return;
+      }
 
       toast({
         title: "Success",
         description: "Registration successful! Please check your email for confirmation.",
       });
+      
+      // 清空表单
+      registerForm.reset();
+      // 切换到登录页面
       setActiveTab('login');
     } catch (error: any) {
       toast({
@@ -144,8 +163,10 @@ export const Auth: React.FC<AuthProps> = ({ isOpen, onClose }) => {
 
     try {
       setIsLoading(true);
+      // 获取完整的网站URL，确保使用绝对URL
+      const siteUrl = window.location.origin;
       const { error } = await supabase.auth.resetPasswordForEmail(email, {
-        redirectTo: `${window.location.origin}/reset-password`,
+        redirectTo: `${siteUrl}/reset-password`,
       });
 
       if (error) throw error;
