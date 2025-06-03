@@ -189,13 +189,13 @@ const Header = () => {
                   </DropdownMenuContent>
                 </DropdownMenu>
               ) : (
-                <Button 
-                  size="sm" 
-                  className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white border-0 shadow-lg hover:shadow-xl transition-all duration-300"
+              <Button 
+                size="sm" 
+                className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white border-0 shadow-lg hover:shadow-xl transition-all duration-300"
                   onClick={() => setIsAuthOpen(true)}
-                >
-                  Login
-                </Button>
+              >
+                Login
+              </Button>
               )}
             </motion.div>
           </div>
@@ -284,18 +284,18 @@ const Header = () => {
                     >
                       <LogOut className="h-4 w-4 mr-2" />
                       Logout
-                    </Button>
-                  </div>
+                      </Button>
+                </div>
                 ) : (
-                  <Button 
+                <Button 
                     className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700"
                     onClick={() => {
                       setIsMenuOpen(false);
                       setIsAuthOpen(true);
                     }}
-                  >
-                    Login
-                  </Button>
+                >
+                  Login
+                </Button>
                 )}
               </motion.div>
             </div>

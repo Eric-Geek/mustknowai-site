@@ -40,20 +40,20 @@ const PageLoader = () => (
 const App: React.FC = () => (
   <QueryClientProvider client={queryClient}>
     <HelmetProvider>
-      <ThemeProvider
-        attribute="class"
-        defaultTheme="system"
-        enableSystem
-        disableTransitionOnChange
-      >
-        <TooltipProvider>
+    <ThemeProvider
+      attribute="class"
+      defaultTheme="system"
+      enableSystem
+      disableTransitionOnChange
+    >
+      <TooltipProvider>
           <ErrorBoundary>
             <AuthProvider>
-              <Toaster />
-              <Sonner />
-              <BrowserRouter>
+        <Toaster />
+        <Sonner />
+        <BrowserRouter>
                 <Suspense fallback={<PageLoader />}>
-                  <Routes>
+          <Routes>
                     {routes.map((route, index) => {
                       const Component = route.component;
                       return (
@@ -68,13 +68,13 @@ const App: React.FC = () => (
                         />
                       );
                     })}
-                  </Routes>
+          </Routes>
                 </Suspense>
-              </BrowserRouter>
+        </BrowserRouter>
             </AuthProvider>
           </ErrorBoundary>
-        </TooltipProvider>
-      </ThemeProvider>
+      </TooltipProvider>
+    </ThemeProvider>
     </HelmetProvider>
   </QueryClientProvider>
 );

@@ -19,8 +19,8 @@ const Footer = () => {
       { label: 'Privacy Policy', href: '/privacy' }
     ],
     recommended: [
-      { label: 'ChatGPT', href: 'https://chat.openai.com', external: true },
-      { label: 'Midjourney', href: 'https://midjourney.com', external: true },
+      { label: 'GlobalGPT', href: 'https://glbgpt.com', external: true },
+      { label: 'ChatGPT', href: 'https://chatgpt.com', external: true },
       { label: 'Claude', href: 'https://claude.ai', external: true }
     ]
   };
