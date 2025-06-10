@@ -30,7 +30,7 @@ const faqData = [
   },
   {
     question: "Do you offer affiliate partnerships?",
-    answer: "Yes, we work with AI tool creators and companies through various partnership programs. Contact us at ericwalker0316@gmail.com for more information about collaboration opportunities."
+    answer: "Yes, we work with AI tool creators and companies through various partnership programs. Contact us at hi@mustknowai.com for more information about collaboration opportunities."
   }
 ];
 

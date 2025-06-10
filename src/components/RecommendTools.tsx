@@ -4,12 +4,6 @@ import { getToolId, hasToolDetail } from '@/lib/toolMapping';
 
 const recommendedTools = [
   {
-    name: "GlobalGPT",
-    description: "All-in-one AI assistant",
-    icon: "🌍",
-    stats: "100+ AI tools"
-  },
-  {
     name: "ChatGPT",
     description: "AI-powered conversational assistant",
     icon: "🤖",

@@ -81,7 +81,7 @@ const Footer = () => {
               Discover thousands of AI tools to make AI work for you.
             </p>
             <p className="text-muted-foreground mb-6">
-              Contact: <a href="mailto:ericwalker0316@gmail.com" className="text-brand-purple hover:underline">ericwalker0316@gmail.com</a>
+              Contact: <a href="mailto:hi@mustknowai.com" className="text-brand-purple hover:underline">hi@mustknowai.com</a>
             </p>
             
             {/* Social icons */}
