@@ -1,117 +1,144 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
-import { getToolId, hasToolDetail } from '@/lib/toolMapping';
-
-const recommendedTools = [
-  {
-    name: "ChatGPT",
-    description: "AI-powered conversational assistant",
-    icon: "🤖",
-    stats: "10M+ users",
-    promoCode: "SAVE20"
-  },
-  {
-    name: "Midjourney",
-    description: "AI image generation platform",
-    icon: "🎨",
-    stats: "5M+ images created"
-  },
-  {
-    name: "Claude",
-    description: "Advanced AI assistant for complex tasks",
-    icon: "🧠",
-    stats: "2M+ users"
-  },
-  {
-    name: "Runway ML",
-    description: "AI video editing and generation",
-    icon: "🎬",
-    stats: "500K+ videos"
-  },
-  {
-    name: "Notion AI",
-    description: "AI-powered workspace and notes",
-    icon: "📝",
-    stats: "1M+ workspaces"
-  },
-  {
-    name: "Copy.ai",
-    description: "AI copywriting and content creation",
-    icon: "✍️",
-    stats: "800K+ users"
-  },
-  {
-    name: "Jasper",
-    description: "AI content marketing platform",
-    icon: "📊",
-    stats: "100K+ businesses"
-  },
-  {
-    name: "Synthesia",
-    description: "AI video creation with avatars",
-    icon: "👤",
-    stats: "300K+ videos"
-  }
-];
+import { motion } from 'framer-motion';
+import ToolCard from './ToolCard';
+import { Button } from '@/components/ui/button';
+import { ArrowRight, Star, Sparkles } from 'lucide-react';
+import { getFeaturedTools } from '@/data/tools';
 
 const RecommendTools = () => {
+  const featuredTools = getFeaturedTools();
+  
   return (
-    <section className="py-8 px-4">
-      <div className="container mx-auto">
-        <h2 className="text-2xl md:text-3xl font-bold text-foreground mb-6">Recommend Tools</h2>
-        
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-          {recommendedTools.map((tool, index) => {
-            const toolId = getToolId(tool.name);
-            const hasDetail = hasToolDetail(tool.name);
+    <section className="py-20 px-4 relative overflow-hidden">
+      {/* 背景装饰 */}
+      <div className="absolute inset-0 bg-gradient-to-br from-blue-50 via-white to-purple-50 dark:from-blue-950/10 dark:via-gray-900 dark:to-purple-950/10" />
+      
+      <div className="container mx-auto relative z-10">
+        {/* 标题区域 */}
+        <motion.div
+          className="text-center mb-16"
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8 }}
+          viewport={{ once: true }}
+        >
+          <motion.div 
+            className="flex items-center justify-center gap-2 mb-4"
+            initial={{ opacity: 0, scale: 0.9 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            viewport={{ once: true }}
+          >
+            <Star className="h-6 w-6 text-yellow-500 fill-yellow-500" />
+            <span className="text-sm font-medium text-gray-600 dark:text-gray-400 bg-yellow-100 dark:bg-yellow-900/30 px-3 py-1 rounded-full">
+              精选推荐
+            </span>
+            <Star className="h-6 w-6 text-yellow-500 fill-yellow-500" />
+          </motion.div>
+          
+          <motion.h2 
+            className="text-4xl md:text-5xl font-bold mb-6"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.3 }}
+            viewport={{ once: true }}
+          >
+            <span className="bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent">
+              编辑精选工具
+            </span>
+          </motion.h2>
+          
+          <motion.p 
+            className="text-xl text-gray-600 dark:text-gray-400 max-w-3xl mx-auto leading-relaxed"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.5 }}
+            viewport={{ once: true }}
+          >
+            我们团队精心挑选的最优秀AI工具，每个都经过严格测试和评估
+          </motion.p>
+        </motion.div>
 
-            const cardContent = (
-              <div className="bg-card rounded-lg border border-border p-4 hover-lift cursor-pointer group">
-              <div className="flex items-center space-x-3 mb-3">
-                <div className="w-10 h-10 rounded-lg bg-accent flex items-center justify-center text-xl">
-                  {tool.icon}
-                </div>
-                <div className="flex-1">
-                  <h3 className="font-semibold text-foreground group-hover:text-brand-purple transition-colors text-sm">
-                    {tool.name}
-                  </h3>
-                  <p className="text-xs text-muted-foreground">
-                    {tool.stats}
-                  </p>
-                </div>
-              </div>
-              
-              <p className="text-xs text-muted-foreground mb-3">
-                {tool.description}
-              </p>
-              
-              {tool.promoCode && (
-                <div className="bg-brand-purple/10 border border-brand-purple/20 rounded-md p-2 text-center">
-                  <span className="text-brand-purple text-xs font-medium">
-                    Code: {tool.promoCode}
-                  </span>
-                </div>
-              )}
-            </div>
-            );
+        {/* 工具网格 */}
+        <motion.div 
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 mb-16"
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          transition={{ duration: 0.8, delay: 0.6 }}
+          viewport={{ once: true }}
+        >
+          {featuredTools.slice(0, 8).map((tool, index) => (
+            <motion.div
+              key={tool.id}
+              initial={{ opacity: 0, y: 50 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ 
+                duration: 0.6, 
+                delay: 0.1 * index,
+                type: "spring",
+                stiffness: 100
+              }}
+              viewport={{ once: true }}
+            >
+              <ToolCard 
+                title={tool.title}
+                description={tool.description}
+                category={tool.category}
+                image={tool.image}
+                stats={tool.stats}
+                featured={tool.featured}
+                pricing={tool.pricing}
+                isNew={tool.isNew}
+                promoCode={tool.promoCode}
+                size="medium"
+              />
+            </motion.div>
+          ))}
+        </motion.div>
 
-            // If the tool has a detail page, wrap with Link
-            if (hasDetail) {
-              return (
-                <Link key={index} to={`/tool/${toolId}`} className="block">
-                  {cardContent}
-                </Link>
-              );
-            }
-
-            // Otherwise, return the card without Link wrapper
-            return (
-              <div key={index}>
-                {cardContent}
-              </div>
-            );
-          })}
-        </div>
+        {/* 底部行动按钮 */}
+        <motion.div 
+          className="text-center"
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.8 }}
+          viewport={{ once: true }}
+        >
+          <motion.div
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+          >
+            <Button 
+              size="lg"
+              className="bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 hover:from-blue-700 hover:via-purple-700 hover:to-pink-700 text-white border-0 rounded-2xl px-8 py-6 text-lg shadow-2xl hover:shadow-blue-500/25 transition-all duration-300 group"
+              onClick={() => window.location.href = '/discover'}
+            >
+              <motion.div 
+                className="flex items-center gap-3"
+                whileHover={{ x: 2 }}
+              >
+                <Sparkles className="h-5 w-5 group-hover:rotate-180 transition-transform duration-500" />
+                <span>发现更多AI工具</span>
+                <motion.div
+                  animate={{ x: [0, 4, 0] }}
+                  transition={{ repeat: Infinity, duration: 1.5 }}
+                >
+                  <ArrowRight className="h-5 w-5" />
+                </motion.div>
+              </motion.div>
+            </Button>
+          </motion.div>
+          
+          <motion.p 
+            className="text-sm text-gray-500 dark:text-gray-400 mt-4"
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            transition={{ duration: 0.6, delay: 1.0 }}
+            viewport={{ once: true }}
+          >
+            探索 {featuredTools.length}+ 精选工具，发现AI的无限可能
+          </motion.p>
+        </motion.div>
       </div>
     </section>
   );

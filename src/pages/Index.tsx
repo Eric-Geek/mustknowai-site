@@ -2,6 +2,7 @@ import React, { lazy } from 'react';
 import { Helmet } from 'react-helmet-async';
 import Header from '@/components/Header';
 import HeroSection from '@/components/HeroSection';
+import CategorySection from '@/components/CategorySection';
 import ErrorBoundary from '@/components/ErrorBoundary';
 import LazySection, { SectionSkeleton } from '@/components/LazySection';
 import { toolsData, getFeaturedTools } from '@/data/tools';
@@ -12,7 +13,6 @@ const JustLaunched = lazy(() => import('@/components/JustLaunched'));
 const BannerAd = lazy(() => import('@/components/BannerAd'));
 const RecommendTools = lazy(() => import('@/components/RecommendTools'));
 const HotTools = lazy(() => import('@/components/HotTools'));
-const RecommendSection = lazy(() => import('@/components/RecommendSection'));
 const FAQ = lazy(() => import('@/components/FAQ'));
 const Footer = lazy(() => import('@/components/Footer'));
 
@@ -49,7 +49,8 @@ const Index: React.FC = () => {
     preloadComponents: [
       () => import('@/components/JustLaunched'),
       () => import('@/components/RecommendTools'),
-      () => import('@/components/HotTools')
+      () => import('@/components/HotTools'),
+      () => import('@/components/CategorySection')
     ],
     timeout: 3000
   });
@@ -61,7 +62,7 @@ const Index: React.FC = () => {
     "name": "MustKnowAI",
     "alternateName": "Must Know AI",
     "url": "https://mustknowai.com",
-    "description": "Discover thousands of AI tools across categories including ChatGPT alternatives, music generation, voice synthesis, and more.",
+    "description": "发现数千个AI工具，包括ChatGPT替代品、音乐生成、语音合成等。",
     "publisher": {
       "@type": "Organization",
       "name": "MustKnowAI",
@@ -77,7 +78,7 @@ const Index: React.FC = () => {
     },
     "mainEntity": {
       "@type": "ItemList",
-      "name": "AI Tools Directory",
+      "name": "AI工具目录",
       "numberOfItems": toolsData.getAllTools().length,
       "itemListElement": featuredTools.slice(0, 5).map((tool, index) => ({
         "@type": "SoftwareApplication",
@@ -90,7 +91,7 @@ const Index: React.FC = () => {
           "@type": "Offer",
           "price": tool.pricing === 'free' ? "0" : tool.pricing === 'freemium' ? "0+" : "varies",
           "priceCurrency": "USD"
-  }
+        }
       }))
     }
   };
@@ -98,33 +99,35 @@ const Index: React.FC = () => {
   return (
     <ErrorBoundary>
       <Helmet>
-        <title>MustKnowAI - Discover AI Tools to Make AI Work for You</title>
+        <title>MustKnowAI - 发现AI工具，让AI为你工作</title>
         <meta 
           name="description" 
-          content="Explore thousands of AI tools across categories including ChatGPT alternatives, music generation, voice synthesis, and more. Find the perfect AI tool for your needs." 
+          content="探索数千个AI工具，包括ChatGPT替代品、音乐生成、语音合成等。在MustKnowAI发现最适合你需求的AI工具。" 
         />
-        <meta name="keywords" content="AI tools, artificial intelligence, ChatGPT, machine learning, voice synthesis, music generation, AI directory" />
+        <meta name="keywords" content="AI工具, 人工智能, ChatGPT, 机器学习, 语音合成, 音乐生成, AI目录, 免费AI工具" />
         
         {/* Open Graph */}
-        <meta property="og:title" content="MustKnowAI - AI Tools Directory" />
-        <meta property="og:description" content="Discover the best AI tools for your needs. From ChatGPT alternatives to music generation and voice synthesis." />
+        <meta property="og:title" content="MustKnowAI - AI工具发现平台" />
+        <meta property="og:description" content="发现最好的AI工具，让人工智能为你的需求服务。从ChatGPT替代品到音乐生成和语音合成。" />
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://mustknowai.com" />
         <meta property="og:image" content="https://mustknowai.com/og-image.jpg" />
         <meta property="og:image:width" content="1200" />
         <meta property="og:image:height" content="630" />
         <meta property="og:site_name" content="MustKnowAI" />
+        <meta property="og:locale" content="zh_CN" />
         
         {/* Twitter Card */}
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content="MustKnowAI - AI Tools Directory" />
-        <meta name="twitter:description" content="Discover the best AI tools for your needs" />
+        <meta name="twitter:title" content="MustKnowAI - AI工具发现平台" />
+        <meta name="twitter:description" content="发现最好的AI工具，让人工智能为你服务" />
         <meta name="twitter:image" content="https://mustknowai.com/og-image.jpg" />
         
         {/* Canonical and additional SEO */}
         <link rel="canonical" href="https://mustknowai.com" />
         <meta name="robots" content="index, follow" />
         <meta name="author" content="MustKnowAI Team" />
+        <meta name="language" content="zh-CN" />
         
         {/* 预连接到外部资源 */}
         <link rel="preconnect" href="https://fonts.googleapis.com" crossOrigin="anonymous" />
@@ -138,95 +141,75 @@ const Index: React.FC = () => {
         </script>
       </Helmet>
 
-    <div className="min-h-screen bg-background">
+      <div className="min-h-screen bg-background">
         {/* 关键内容立即加载 */}
-      <Header />
+        <Header />
         
         <main role="main">
-      <HeroSection />
+          <HeroSection />
           
-          {/* 非关键内容延迟加载 */}
+          {/* 分类展示区域 - 新增的重点部分 */}
+          <LazySection
+            threshold={0.1}
+            rootMargin="100px"
+            fallback={<RecommendSkeleton />}
+          >
+            <CategorySection />
+          </LazySection>
+          
+          {/* 最新推出 */}
           <LazySection
             threshold={0.1}
             rootMargin="100px"
             fallback={<HeroSkeleton />}
           >
-      <JustLaunched />
+            <JustLaunched />
           </LazySection>
           
+          {/* 广告横幅 */}
           <LazySection
             threshold={0.1}
             fallback={<SectionSkeleton height="h-32" />}
           >
-      <BannerAd />
+            <BannerAd />
           </LazySection>
           
+          {/* 推荐工具 */}
           <LazySection
             threshold={0.1}
             rootMargin="100px"
             fallback={<RecommendSkeleton />}
           >
-      <RecommendTools />
+            <RecommendTools />
           </LazySection>
           
+          {/* 热门工具 */}
           <LazySection
             threshold={0.1}
             rootMargin="100px"
             fallback={<RecommendSkeleton />}
           >
-      <HotTools />
+            <HotTools />
           </LazySection>
           
-          {/* 分类推荐部分 */}
-          <LazySection
-            threshold={0.05}
-            rootMargin="50px"
-            fallback={<RecommendSkeleton />}
-          >
-            <RecommendSection 
-              title="Free Tools" 
-              tools={toolsData.freeTools}
-            />
-          </LazySection>
-          
-          <LazySection
-            threshold={0.05}
-            rootMargin="50px"
-            fallback={<RecommendSkeleton />}
-          >
-            <RecommendSection 
-              title="Music & Audio" 
-              tools={toolsData.musicTools}
-            />
-          </LazySection>
-          
-          <LazySection
-            threshold={0.05}
-            rootMargin="50px"
-            fallback={<RecommendSkeleton />}
-          >
-            <RecommendSection 
-              title="Voice & Speech" 
-              tools={toolsData.voiceTools}
-            />
-          </LazySection>
-          
+          {/* FAQ */}
           <LazySection
             threshold={0.1}
             fallback={<SectionSkeleton height="h-96" />}
           >
-      <FAQ />
+            <FAQ />
           </LazySection>
         </main>
         
+        {/* 页脚 */}
         <LazySection 
           threshold={0.5}
           rootMargin="200px"
           fallback={<SectionSkeleton height="h-64" className="rounded-none" />}
         >
-      <Footer />
+          <Footer />
         </LazySection>
-    </div>
+      </div>
     </ErrorBoundary>
   );
 };
